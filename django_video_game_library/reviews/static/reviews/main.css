@@ -3,6 +3,7 @@ body
     background: darkgray;
     color: #333;
     padding: 16px 0px;
+    font-family: "Helvetica";
 
     .review_container
     {
