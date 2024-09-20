@@ -1,0 +1,10 @@
+{% extends "reviews/base.html" %}
+    {% block content %}
+    <h1>Reviews Home</h1>
+    {% for review in reviews %}
+    <div class = "review_container">
+        <p>{{review.content}}</p>
+        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}}</small>
+    </div>
+    {% endfor %}
+{% endblock content %}
