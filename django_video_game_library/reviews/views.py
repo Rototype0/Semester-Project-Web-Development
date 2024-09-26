@@ -15,6 +15,9 @@ reviews = [
     },
 ]
 
+def Demo(request):
+    return render(request, 'reviews/demo.html')
+
 def Home(request):
     context = {
         'reviews': Review.objects.all(),
