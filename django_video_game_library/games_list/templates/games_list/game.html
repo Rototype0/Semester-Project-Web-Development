@@ -1,0 +1,16 @@
+{% extends "games_list/base.html" %}
+    {% block content %}
+    <h1>{{game_info.name}}</h1>
+    <p>Publishers: 
+        {% for publisher in game_info.publishers %}
+        {{publisher}}
+        {% endfor %}
+    </p>
+    <p>Developers: 
+        {% for developer in game_info.developers %}
+        {{developer}}
+        {% endfor %}</p>
+    {% for info in game_info %}
+        <small>{{info}}</small>
+    {% endfor %}
+{% endblock content %}
