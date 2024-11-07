@@ -3,8 +3,9 @@
     <h1>Reviews Home</h1>
     {% for review in reviews %}
     <div class = "review_container">
-        <p>{{review.content}}</p>
-        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}}</small>
+        <p>{{review.header}}</p>
+        <h4>{{review.content}}</h4>
+        <small>By {{rating.user}} on {{review.date_posted|date:'j F Y'}} with rating</small>
     </div>
     {% endfor %}
 {% endblock content %}
