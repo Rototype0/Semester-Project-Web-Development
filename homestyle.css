@@ -1,0 +1,136 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  
+  body, html {
+    height: 100%;
+  }
+  
+  body {
+    display: flex;
+    flex-direction: column;
+    background-color: #f5f7fa;
+    color: #333;
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 2rem;
+    text-align: center;
+  }
+  
+  .navbar {
+    width: 100%;
+    background-color: #9E6BFF; 
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    height: 75px;
+  }
+  
+  .navbar-logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #fff;
+    padding: 0 1.5rem;
+  }
+  
+  .navbar-menu {
+    display: flex;
+    flex-grow: 1; 
+    height: 100%; 
+  }
+
+  .navbar-menu a {
+    flex-grow: 1; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 1rem;
+    background-color: #9E6BFF; 
+    border: none;
+    height: 100%; 
+    transition: background-color 0.3s ease;
+  }
+
+  .navbar-menu a:hover {
+    background-color: #7c51cc; 
+  }
+
+  @media (max-width: 768px) {
+    .navbar {
+      flex-direction: column;
+      padding: 1rem;
+    }
+  
+    .navbar-menu {
+      flex-direction: column;
+      width: 100%;
+    }
+  
+    .navbar-menu a {
+      width: 100%; 
+    }
+  }
+  
+  .home-intro {
+    margin-top: 2rem;
+    text-align: center;
+  }
+  
+  .home-intro h1 {
+    font-size: 2.5rem;
+    color: #333;
+  }
+  
+  .home-intro p {
+    font-size: 1.25rem;
+    color: #666;
+    margin: 0.5rem 0 1.5rem;
+  }
+  
+  
+  .game-section {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 2rem;
+  }
+  
+  .game-card {
+    width: 200px;
+    padding: 1rem;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    text-align: center;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .game-card h2 {
+    font-size: 1.25rem;
+    color: #333;
+  }
+  
+  .game-card p {
+    font-size: 1rem;
+    color: #666;
+    margin: 0.5rem 0 1rem;
+  }
