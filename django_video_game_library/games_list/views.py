@@ -10,7 +10,7 @@ def List(request):
     response = requests.get(url)
     data = response.json()
 
-    paginator = Paginator(data['applist']['apps'], 20)
+    paginator = Paginator(data['applist']['apps'], 10)
     page = request.GET.get('page')
 
     apps = paginator.get_page(page)
