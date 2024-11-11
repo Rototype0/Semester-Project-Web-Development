@@ -11,7 +11,7 @@ def Home(request):
     return render(request, 'reviews/home.html', {"reviews": reviews})
 
 
-def rate(request, post_id: int, rating: int):
+def rate(request, review_id: int, rating: int):
     review = Review.objects.get(id=review_id)
     Rating.objects.filter(review=review, user=request.user).delete()
     review.rating_set.create(user=request.user, rating=rating)
@@ -23,6 +23,9 @@ def About(request):
         'title': 'About',
     }
     return render(request, 'reviews/about.html', context)
+
+#def AppID(request):
+    
 
 """def index(request)
     reviews = Review.objects.all
