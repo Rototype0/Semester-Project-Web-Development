@@ -1,13 +1,13 @@
 body 
 {
-    background: darkgray;
+    background: linear-gradient(to right, #e2e2e2, #BDD5EA);
     color: #333;
     padding: 16px 0px;
     font-family: "Helvetica";
 
     .review_container
     {
-        background-color: lightgray;
+        background: linear-gradient(to right, #BDD5EA, #e2e2e2);
         color: black;
         border: 2px solid gray;
         border-radius: 15px;
@@ -26,7 +26,7 @@ body
         margin: 0;
         padding: 0;
         overflow: hidden;
-        background-color: #333;
+        background-color: #6247AA;
     }
 
     ul.nav_bar li
