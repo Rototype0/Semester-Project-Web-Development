@@ -7,6 +7,25 @@ from django.db.models import Avg
 # Create your models here.
 
 class Review(models.Model):
+    appid = models.IntegerField()
+    header = models.CharField(max_length=100, default="Header")
+    content = models.TextField()
+    date_posted = models.DateTimeField(default=timezone.now)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.header} (Game ID: {self.appid})"
+
+class Rating(models.Model):
+    appid = models.IntegerField()
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    review = models.ForeignKey(Review, on_delete=models.CASCADE, null=True, blank=True)
+    rating = models.IntegerField(default=0)
+
+    def __str__(self):
+        return f"Rating: {self.rating} for Game ID: {self.appid}"
+
+'''class Review(models.Model):
     header = models.CharField(max_length=100, default="Header")
     content = models.TextField()
     date_posted = models.DateTimeField(default = timezone.now)
@@ -26,7 +45,7 @@ class Rating(models.Model):
     def __str__(self):
         return f"{self.review.header}: {self.rating}"
     
-'''class AppID(models.Model):
+class AppID(models.Model):
     review = models.ForeignKey(Review, on_delete = models.CASCADE)
     rating = models.ForeignKey(Rating, on_delete=models.CASCADE)
     appid = models.ForeignKey(Game.appid, on_delete=models.CASCADE)

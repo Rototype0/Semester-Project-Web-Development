@@ -5,7 +5,7 @@
     <div class = "review_container">
         <p>{{review.header}}</p>
         <h4>{{review.content}}</h4>
-        <small>By {{rerview.author}} on {{review.date_posted|date:'j F Y'}} with rating <li name = "rating-list">{{ rating.rating }}</li></small>
+        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}} with rating <li name = "rating-list">{{ rating.rating }}</li></small>
     </div>
     {% endfor %}
 {% endblock content %}

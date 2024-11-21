@@ -6,6 +6,6 @@ from django.conf.urls.static import static
 urlpatterns = [
     #path('', views.Home, name='reviews-home'),
     path('about/', views.About, name='reviews-about'),
-    path('rate/<int:post_id>/<int:rating>/', views.rate),
+    #path('rate/<int:post_id>/<int:rating>/', views.rate),
     path('', views.Home, name='reviews-home'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
