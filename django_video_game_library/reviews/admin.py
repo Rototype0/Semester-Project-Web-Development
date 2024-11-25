@@ -13,10 +13,10 @@ class ReviewAdmin(admin.ModelAdmin):
 
 @admin.register(Rating)
 class RatingAdmin(admin.ModelAdmin):
-    list_display = ('appid', 'user', 'rating', 'review')
-    list_filter = ('appid', 'user', 'rating')
+    list_display = ('appid', 'user', 'score', 'review')
+    list_filter = ('appid', 'user', 'score')
     search_fields = ('appid', 'user__username')
-    ordering = ('appid', 'rating')
+    ordering = ('appid', 'score')
 
 #admin.site.register(Review)
 #admin.site.register(Rating)

@@ -16,9 +16,8 @@ def About(request):
 def Home(request, appid):
     game = get_object_or_404(Game, appid=appid)
     reviews = Review.objects.filter(appid=appid)
-    ratings = Rating.objects.filter(appid=appid)
 
-    return render(request, 'Home.html', {
+    return render(request, 'game_detail.html', {
         'game': game,
         'reviews': reviews,
         'ratings': ratings,
