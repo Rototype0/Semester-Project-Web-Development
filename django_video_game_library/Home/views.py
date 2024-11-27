@@ -1,11 +1,12 @@
+from django.shortcuts import render, get_object_or_404
+from games_list.models import Game
+from django.core import serializers
+from django.core.paginator import Paginator
 import requests
 import json
 import time
-from django.core import serializers
-from django.shortcuts import render
-from django.core.paginator import Paginator
 
-def List(request):
+def Home(request):
     url = 'https://api.steampowered.com/ISteamApps/GetAppList/v0002/?key=STEAMKEY&format=json'
     response = requests.get(url)
     data = response.json()
@@ -20,18 +21,13 @@ def List(request):
         url = 'https://store.steampowered.com/api/appdetails?appids=' + str(app["appid"])
         response = requests.get(url)
         data = response.json()
-        time.sleep(0.5)
+        time.sleep(2)
         app.update(data[str(app["appid"])]["data"])
 
-    return render(request, 'games_list/home.html', {'games': apps})
-
-def Game_Info(request, appid):
-    url = 'https://store.steampowered.com/api/appdetails?appids=' + appid
-    response = requests.get(url)
-    data = response.json()
-
-    return render(request, 'games_list/game.html', {'game_info': data[appid]["data"]})
-    
+    return render(request, 'home.html', {'games': apps})
 
 def About(request):
-    return render(request, 'games_list/about.html')
+    context = {
+        'title': 'About',
+    }
+    return render(request, 'about.html', context)
