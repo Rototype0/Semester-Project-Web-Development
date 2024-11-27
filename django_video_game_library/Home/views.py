@@ -7,11 +7,19 @@ import json
 import time
 
 def Home(request):
-    url = 'https://api.steampowered.com/ISteamApps/GetAppList/v0002/?key=STEAMKEY&format=json'
+    number_of_games_per_page = 20
+    url = 'https://api.steampowered.com/IStoreService/GetAppList/v1/?key=9CCFEAB8694DD2F007E55F87C3C523F6'
+    '&include_games=true'
+    '&include_dlc=false'
+    '&include_software=false'
+    '&include_videos=false'
+    '&include_hardware=false'
+    '&last_appid=17150'
+    '&max_results=' + str(number_of_games_per_page)
     response = requests.get(url)
     data = response.json()
 
-    paginator = Paginator(data['applist']['apps'], 20)
+    paginator = Paginator(data['response']['apps'], number_of_games_per_page)
     page = request.GET.get('page')
 
     apps = paginator.get_page(page)
@@ -21,13 +29,12 @@ def Home(request):
         url = 'https://store.steampowered.com/api/appdetails?appids=' + str(app["appid"])
         response = requests.get(url)
         data = response.json()
-        time.sleep(2)
         app.update(data[str(app["appid"])]["data"])
 
-    return render(request, 'home.html', {'games': apps})
+    return render(request, 'home/game_list.html', {'games': apps})
 
 def About(request):
     context = {
         'title': 'About',
     }
-    return render(request, 'about.html', context)
+    return render(request, 'home/about.html', context)
