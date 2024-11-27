@@ -7,14 +7,14 @@ import json
 import time
 
 def Home(request):
-    number_of_games_per_page = 20
+    number_of_games_per_page = 21
     url = 'https://api.steampowered.com/IStoreService/GetAppList/v1/?key=9CCFEAB8694DD2F007E55F87C3C523F6'
     '&include_games=true'
     '&include_dlc=false'
     '&include_software=false'
     '&include_videos=false'
     '&include_hardware=false'
-    '&last_appid=17150'
+    #'&last_appid=0'
     '&max_results=' + str(number_of_games_per_page)
     response = requests.get(url)
     data = response.json()

@@ -4,6 +4,7 @@
     {% for game in games %}
     <div class = "review_container">
         <p>{{game.name}}</p>
+        <a href="game/{{games.appid}}">{{game.name}}</a>
         {% for key, value in game.items %}
             {% if key == "header_image" %}
                 <img src="{{value}}" alt="Flowers in Chania">

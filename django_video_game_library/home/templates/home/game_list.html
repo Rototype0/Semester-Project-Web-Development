@@ -11,7 +11,7 @@
         {% endfor %}
     </div>
     {% endfor %}
-    
+    <div class = "paginator">
     {% if games.has_previous %}
         <a href="?page=1">First</a>
         <a href="?page={{games.previous_page_number}}">Previous</a>
@@ -21,4 +21,6 @@
         <a href="?page={{games.next_page_number}}">Next</a>
         <a href="?page={{games.paginator.num_pages}}">Last</a>
     {% endif %}
+    </div>
+    
 {% endblock content %}

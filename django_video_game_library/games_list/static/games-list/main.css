@@ -16,6 +16,11 @@ body
         padding: 20px;
     }
 
+    .review_container img
+    {
+        scale:inherit
+    }
+
     ul.nav_bar
     {
         position: absolute;
