@@ -2,32 +2,40 @@ body
 {
     background: linear-gradient(to right, #e2e2e2, #BDD5EA);
     color: #333;
-    padding: 16px 0px;
+    padding: 32px 0px;
+    margin:0px;
     font-family: "Helvetica";
 
-    .review_container
+    .game_container
     {
         display: inline-block;
-        position: sticky;
-        text-align: center;
+        text-align: left;
         background: linear-gradient(to right, #BDD5EA, #e2e2e2);
         color: black;
         border: 2px solid gray;
-        border-radius: 15px;
-        width: 25%;
-        margin: 20px;
-        padding: 20px;
+        width: 100%;
+        margin:0px;
+        padding:0%;
     }
     
-    .review_container img
+    .game_container h3
     {
-        max-width: 100%;
-        max-height: 100%;
+        margin:10px
     }
 
-    .paginator
+    .game_grid
     {
-        position: static;
+        background: transparent;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: auto auto auto;
+        padding: 10px;
+    }
+    
+    .game_container img
+    {
+        display: block;
+        width: 100%;
     }
 
     ul.nav_bar

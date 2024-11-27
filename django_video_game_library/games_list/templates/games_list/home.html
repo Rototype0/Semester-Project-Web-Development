@@ -1,25 +1,19 @@
 {% extends "base.html" %}
     {% block content %}
     <h1>Game List</h1>
-    {% for game in games %}
-    <div class = "review_container">
-        <p>{{game.name}}</p>
-        <a href="game/{{games.appid}}">{{game.name}}</a>
-        {% for key, value in game.items %}
-            {% if key == "header_image" %}
-                <img src="{{value}}" alt="Flowers in Chania">
-            {% endif %}
+    <div class = "game_grid">
+        {% for game in games %}
+        <div class = "game_container">
+            <h3>{{game.name}}</h3>
+            {% for key, value in game.items %}
+                {% if key == "header_image" %}
+                <a href="games-list/game/{{game.steam_appid}}"><img src="{{value}}" alt="Flowers in Chania"></a>
+                {% endif %}
+            {% endfor %}
+            <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
+        </div>
         {% endfor %}
     </div>
-    {% endfor %}
     
-    {% if games.has_previous %}
-        <a href="?page=1">First</a>
-        <a href="?page={{games.previous_page_number}}">Previous</a>
-    {% endif %}
-    {{games}}
-    {% if games.has_next %}
-        <a href="?page={{games.next_page_number}}">Next</a>
-        <a href="?page={{games.paginator.num_pages}}">Last</a>
-    {% endif %}
+    <a href="?last_appid={{last_appid}}">Next Page</a>
 {% endblock content %}

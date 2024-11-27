@@ -13,6 +13,6 @@ from django.conf.urls.static import static
 '''
 
 urlpatterns = [
-    path('', views.Home, name='Home'),
-    path('about/', views.About, name='About'),
+    path('', views.Home, name='home'),
+    path('about/', views.About, name='about'),
 ]
