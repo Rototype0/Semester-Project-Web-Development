@@ -2,6 +2,9 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 from django.db.models import Avg
+from django.shortcuts import get_object_or_404
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 #from games_list.models import Game
 
 # Create your models here.
@@ -11,6 +14,7 @@ class Review(models.Model):
     content = models.TextField()
     date_posted = models.DateTimeField(default = timezone.now)
     author = models.ForeignKey(User, on_delete = models.CASCADE)
+    likes = models.ManyToManyField(User, blank=True, related_name='likes') #added likes to review class
     #rating = models.IntegerField(default = 0)
     #appid = models.ForeignKey(Game.appid, on_delete = models.CASCADE)
     #user = models.ForeignKey(Rating.user, on_delete = models.CASCADE)
@@ -35,3 +39,5 @@ class Rating(models.Model):
         return f"{self.appid}"
      '''
 
+#def Upvotes(request, pk):
+    #post = get_object_or_404
