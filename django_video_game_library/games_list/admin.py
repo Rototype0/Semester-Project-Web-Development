@@ -8,3 +8,8 @@ from games_list.models import *
 class GameAdmin(admin.ModelAdmin):
     list_display = ('appid', 'name')
     search_fields = ('name',)
+
+@admin.register(GameData)
+class GameDataAdmin(admin.ModelAdmin):
+    list_display = ('appid', 'short_description')
+    search_fields = ('appid',)

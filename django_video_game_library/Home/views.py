@@ -1,37 +1,54 @@
 from django.shortcuts import render
+from games_list.models import Game
 import requests
-import time
+from django.core.paginator import Paginator
+from concurrent.futures import ThreadPoolExecutor
+from django.forms.models import model_to_dict
+
+def fetch_app_reviews(appid):
+    """Fetch reviews for a specific appid."""
+    url = f"https://store.steampowered.com/appreviews/{appid}?json=1&language=all&num_per_page=0&purchase_type=all"
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Raise exception for HTTP errors
+        return appid, response.json()
+    except requests.exceptions.RequestException as e:
+        return appid, {"error": str(e)}
+
+def fetch_reviews_for_multiple_apps(appids):
+    results = {}
+    with ThreadPoolExecutor() as executor:
+        future_to_appid = {executor.submit(fetch_app_reviews, appid): appid for appid in appids}
+        for future in future_to_appid:
+            appid, data = future.result()
+            results[appid] = data
+    return results
 
 def Home(request):
-    number_of_games_per_page = 21
-    last_appid = request.GET.get('last_appid')
 
-    base_url = ('https://api.steampowered.com/IStoreService/GetAppList/v1/?key=9CCFEAB8694DD2F007E55F87C3C523F6'
-    '&include_games=true'
-    '&include_dlc=false'
-    '&include_software=false'
-    '&include_videos=false'
-    '&include_hardware=false'
-    '&last_appid=' + str(last_appid) + ''
-    '&max_results=' + str(number_of_games_per_page))
+    paginator = Paginator(Game.objects.all(), 21)
+    page = request.GET.get('page')
 
-    response = requests.get(base_url)
-    data = response.json()
+    
+    paginator_page = paginator.get_page(page)
+    apps = paginator.page(page)
 
-    last_appid = data['response']['last_appid']
-    apps = data['response']['apps']
+    apps_as_dict = list(apps.object_list.values())
 
+    appids = []
     for app in apps:
-        print("done with app: " + str(app["appid"]))
-        url = 'https://store.steampowered.com/api/appdetails?appids=' + str(app["appid"]) + '&filters=basic'
-        response = requests.get(url)
-        data = response.json()
-        app.update(data[str(app["appid"])]["data"])
-        url = 'https://store.steampowered.com/appreviews/' + str(app["appid"]) + '?json=1'
-        response = requests.get(url)
-        data = response.json()
-        app.update(data["query_summary"])
-    return render(request, 'games_list/home.html', {'games': apps, 'last_appid': last_appid, 'example_url': base_url})
+        appids.append(app.appid)
+
+    reviews = fetch_reviews_for_multiple_apps(appids)
+
+    print(reviews)
+
+    for app in apps_as_dict:
+        print(app['name'])
+        print(reviews[app['appid']]['query_summary'])
+        app.update(reviews[app['appid']]['query_summary'])
+
+    return render(request, 'games_list/home.html', {'games': apps_as_dict, 'paginator': paginator_page})
 
 def About(request):
     context = {

@@ -19,7 +19,7 @@ from django.urls import path, include
 from . import views
 
 urlpatterns = [
-    path('home/', views.List, name='game_lib_home'),
+    path('importjson/', views.import_data, name='import_json'),
     path('game/<str:appid>/', views.Game_Info, name='game_lib_game'),
     path('about/', views.About, name='game_lib_about')
 ]

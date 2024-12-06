@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reviews.apps.ReviewsConfig',
     'games_list',
-    'home'
+    'home',
 ]
 
 MIDDLEWARE = [

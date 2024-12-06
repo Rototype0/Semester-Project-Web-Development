@@ -2,18 +2,26 @@
     {% block content %}
     <h1>Game List</h1>
     <div class = "game_grid">
-        {% for game in games %}
-        <div class = "game_container">
-            <h3>{{game.name}}</h3>
-            {% for key, value in game.items %}
-                {% if key == "header_image" %}
-                <a href="games-list/game/{{game.steam_appid}}"><img src="{{value}}" alt="Flowers in Chania"></a>
-                {% endif %}
-            {% endfor %}
-            <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
-        </div>
+        {% for paginator_game in paginator %}
+            <div class = "game_container">
+                <h3>{{paginator_game.name}}</h3>
+                <a href="games-list/game/{{paginator_game.appid}}"><img src="{{paginator_game.gamedata.header_image}}" alt="Flowers in Chania"></a>
+                {% for game in games %}
+                    {% if forloop.parentloop.counter0 == forloop.counter0 %}
+                    <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
+                    {% endif %}
+                {% endfor %}
+            </div>
         {% endfor %}
     </div>
     
-    <a href="?last_appid={{last_appid}}">Next Page</a>
+    {% if paginator.has_previous %}
+        <a href="?page=1">First</a>
+        <a href="?page={{paginator.previous_page_number}}">Previous</a>
+    {% endif %}
+    {{paginator}}
+    {% if paginator.has_next %}
+        <a href="?page={{paginator.next_page_number}}">Next</a>
+        <a href="?page={{paginator.paginator.num_pages}}">Last</a>
+    {% endif %}
 {% endblock content %}

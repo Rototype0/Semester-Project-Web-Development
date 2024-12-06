@@ -1,6 +1,4 @@
 from django.db import models
-from reviews.models import Review, Rating
-
 
 class Game(models.Model):
     appid = models.IntegerField()
@@ -8,4 +6,13 @@ class Game(models.Model):
     #review = models.ForeignKey(Review, on_delete=models.CASCADE)
     #rating = models.ForeignKey(Rating, on_delete=models.CASCADE)
     def __str__(self): 
-         return self.name
+         return str(self.appid)
+
+class GameData(models.Model):
+    appid = models.OneToOneField(Game, on_delete=models.CASCADE)
+    is_free = models.BooleanField()
+    detailed_description = models.TextField()
+    supported_languages = models.TextField(default="bruh")
+    short_description = models.TextField()
+    header_image = models.URLField()
+    
