@@ -28,7 +28,29 @@ def import_data(request):
             if Game.objects.filter(appid=item['appid']).exists():
                 print(str(item['name']) +' already Exists')
                 if not GameData.objects.filter(appid=Game.objects.filter(appid=item['appid'])[0]).exists():
-                    print(str(item['name']) +' does not have a GameData object!')
+                    print(str(item['name']) +' does not have a GameData object!!!!!!!!')
+                    url = 'https://store.steampowered.com/api/appdetails?appids=' + str(item['appid']) + '&filters=basic'
+                    response = requests.get(url)
+                    json_game_data = response.json()
+                    
+                    time.sleep(0.75)
+
+                    if json_game_data != None:
+                        if json_game_data[str(item['appid'])]['success'] == True:
+                            game.save()
+                            print(str(item['appid']))
+                            json_game_data = json_game_data[str(item['appid'])]['data']
+                            game_data = GameData(
+                                appid = game,
+                                is_free = json_game_data.get('is_free', False),
+                                supported_languages = json_game_data.get('supported_languages', 'English'),
+                                detailed_description = json_game_data.get('detailed_description', 'Description'),
+                                short_description = json_game_data.get('short_description', 'Description'),
+                                header_image = json_game_data.get('header_image', 'Header image')
+                            )
+                            game_data.save()
+                        else:
+                            print("Could not build Gamedata object :(")
             else:
                 game = Game(
                     appid=item['appid'],
@@ -47,11 +69,11 @@ def import_data(request):
                         json_game_data = json_game_data[str(item['appid'])]['data']
                         game_data = GameData(
                             appid = game,
-                            is_free = json_game_data['is_free'],
-                            supported_languages = json_game_data['supported_languages'],
-                            detailed_description = json_game_data['detailed_description'],
-                            short_description = json_game_data['short_description'],
-                            header_image = json_game_data['header_image']
+                            is_free = json_game_data.get('is_free', False),
+                            supported_languages = json_game_data.get('supported_languages', 'English'),
+                            detailed_description = json_game_data.get('detailed_description', 'Description'),
+                            short_description = json_game_data.get('short_description', 'Description'),
+                            header_image = json_game_data.get('header_image', 'Header image')
                         )
                         game_data.save()
                 else:

@@ -3,7 +3,6 @@ from games_list.models import Game
 import requests
 from django.core.paginator import Paginator
 from concurrent.futures import ThreadPoolExecutor
-from django.forms.models import model_to_dict
 
 def fetch_app_reviews(appid):
     """Fetch reviews for a specific appid."""
@@ -40,8 +39,6 @@ def Home(request):
         appids.append(app.appid)
 
     reviews = fetch_reviews_for_multiple_apps(appids)
-
-    print(reviews)
 
     for app in apps_as_dict:
         print(app['name'])
