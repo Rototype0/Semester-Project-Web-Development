@@ -37,7 +37,6 @@ def import_data(request):
 
                     if json_game_data != None:
                         if json_game_data[str(item['appid'])]['success'] == True:
-                            game.save()
                             print(str(item['appid']))
                             json_game_data = json_game_data[str(item['appid'])]['data']
                             game_data = GameData(
