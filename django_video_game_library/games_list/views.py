@@ -3,15 +3,11 @@ import json
 from django.shortcuts import render
 from .models import Game, GameData
 import time
-from concurrent.futures import ThreadPoolExecutor
 
 
 def Game_Info(request, appid):
-    url = 'https://store.steampowered.com/api/appdetails?appids=' + appid
-    response = requests.get(url)
-    data = response.json()
-
-    return render(request, 'games_list/game.html', {'game_info': data[appid]["data"]})
+    game = Game.objects.filter(appid=appid).first()
+    return render(request, 'games_list/game.html', {'game': game})
 
 def import_data(request):
     if request.method == 'POST' and request.FILES['json_file']:

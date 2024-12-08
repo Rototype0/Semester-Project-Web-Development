@@ -28,6 +28,9 @@ def Home(request):
     paginator = Paginator(Game.objects.all(), 21)
     page = request.GET.get('page')
 
+    if page == None:
+        page = 1
+    
     
     paginator_page = paginator.get_page(page)
     apps = paginator.page(page)

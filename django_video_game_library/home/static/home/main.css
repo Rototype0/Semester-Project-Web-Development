@@ -1,85 +1,36 @@
-body 
+body
 {
-    background: linear-gradient(to right, #e2e2e2, #BDD5EA);
-    color: #333;
-    padding: 32px 0px;
-    margin:0px;
-    font-family: "Helvetica";
+    margin-top: 100px;
+    margin-bottom: 100px;
+    background-color: #2F3440;
+}
 
-    .game_container
-    {
-        display: inline-block;
-        text-align: left;
-        background: linear-gradient(to right, #BDD5EA, #e2e2e2);
-        color: black;
-        border: 2px solid gray;
-        width: 100%;
-        margin:0px;
-        padding:0%;
-    }
-    
-    .game_container h3
-    {
-        margin:10px
-    }
+.page_controls
+{
+    color: #2F3440;
+}
 
-    .game_grid
-    {
-        background: transparent;
-        display: grid;
-        gap: 20px;
-        grid-template-columns: auto auto auto;
-        padding: 10px;
-    }
-    
-    .game_container img
-    {
-        display: block;
-        width: 100%;
-    }
+/* unvisited link */
+.page_controls:link {
+    color: #2F3440;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: #2F3440;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: #4f5768;
+  }
+  
+  /* selected link */
+  a:active {
+    color: #2F3440
+  }
 
-    ul.nav_bar
-    {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        list-style-type: none;
-        margin: 0;
-        padding: 0;
-        overflow: hidden;
-        background-color: #6247AA;
-    }
-
-    ul.nav_bar li
-    {
-        float: left;
-    }
-
-    ul.nav_bar li a 
-    {
-        display: block;
-        color: #CCCCCC;
-        text-align: center;
-        padding: 14px 16px;
-        text-decoration: none;
-    }
-    .rating-list li {
-        float: right;
-        color: #ddd;
-        padding: 10px 5px;
-      }
-
-      .rating-list li:hover,
-      .rating-list li:hover ~ li {
-        color: orange;
-      }
-
-      .rating-list {
-        display: inline-block;
-        list-style: none;
-      }
-      .checked {
-          color: orange;
-      }
+.img-thumbnail
+{
+    max-height: 80px;
 }

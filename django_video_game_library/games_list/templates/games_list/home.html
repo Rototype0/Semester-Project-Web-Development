@@ -1,27 +1,37 @@
 {% extends "base.html" %}
     {% block content %}
-    <h1>Game List</h1>
-    <div class = "game_grid">
+    <ul class="list-group">
         {% for paginator_game in paginator %}
-            <div class = "game_container">
-                <h3>{{paginator_game.name}}</h3>
-                <a href="games-list/game/{{paginator_game.appid}}"><img src="{{paginator_game.gamedata.header_image}}" alt="Flowers in Chania"></a>
-                {% for game in games %}
-                    {% if forloop.parentloop.counter0 == forloop.counter0 %}
-                    <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
-                    {% endif %}
-                {% endfor %}
+        <a href="games-list/game/{{paginator_game.appid}}" class="list-group-item list-group-item-action list-group-item-dark">
+            <div class="row">
+                <div class="col-2">           
+                    <img src="{{paginator_game.gamedata.header_image}}" alt="Flowers in Chania" class="img-thumbnail">
+                </div>
+                <div class="col-6">
+                    <h3>{{paginator_game.name}}</h3>
+                </div>
+                <div class="col-4">
+                    {% for game in games %}
+                        {% if forloop.parentloop.counter0 == forloop.counter0 %}
+                            <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </div>
             </div>
+        </a>
         {% endfor %}
-    </div>
-    
-    {% if paginator.has_previous %}
-        <a href="?page=1">First</a>
-        <a href="?page={{paginator.previous_page_number}}">Previous</a>
-    {% endif %}
-    {{paginator}}
-    {% if paginator.has_next %}
-        <a href="?page={{paginator.next_page_number}}">Next</a>
-        <a href="?page={{paginator.paginator.num_pages}}">Last</a>
-    {% endif %}
+        <li class="list-group-item list-group-item-action list-group-item-dark">
+            <div class="d-flex justify-content-center">
+                <a href="?page=1" class="page_controls">First</a>
+                {% if paginator.has_previous %}
+                    <a href="?page={{paginator.previous_page_number}}" class="page_controls">Previous</a>
+                {% endif %}
+                <p> {{paginator}} </p>
+                {% if paginator.has_next %}
+                    <a href="?page={{paginator.next_page_number}}" class="page_controls">Next</a>
+                {% endif %}
+                <a href="?page={{paginator.paginator.num_pages}}" class="page_controls">Last</a>
+            </div>
+        </li>
+    </ul>
 {% endblock content %}

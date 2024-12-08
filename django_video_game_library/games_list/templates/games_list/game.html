@@ -1,16 +1,35 @@
 {% extends "base.html" %}
-    {% block content %}
-    <h1>{{game_info.name}}</h1>
-    <p>Publishers: 
-        {% for publisher in game_info.publishers %}
-        {{publisher}}
-        {% endfor %}
-    </p>
-    <p>Developers: 
-        {% for developer in game_info.developers %}
-        {{developer}}
-        {% endfor %}</p>
-    {% for info in game_info %}
-        <small>{{info}}</small>
-    {% endfor %}
+{% block content %}
+<div class="row" style="background-color: #BCC0C7;">
+    <div class="col-7">
+        <div class = "game_container">
+            <h3>{{game.name}}</h3>
+            <img src="{{game.gamedata.header_image}}" alt="Flowers in Chania" style="width: 100%; height: auto;"></a>
+            <p></p>
+        </div>
+    </div>
+    <div class="col-5">
+        <h3 style="margin-top: 35px;">Game Summary:</h3>
+        <p>{{game.gamedata.short_description}}</p>
+    </div>
+</div>
+<div class="row" style="background-color: #BCC0C7;">
+    <div class="col-8">
+        <h3>Supported Languages:</h3>
+        <p>{{game.gamedata.supported_languages |safe}}</p>
+    </div>
+    <div class="col-4">
+        {% if game.gamedata.is_free %}
+            <p>Game is free to play!</p>
+        {% else %}
+            <p>Game is not free to play</p>
+        {% endif %}
+    </div>
+</div>
+<div class="row" style="background-color: #BCC0C7;">
+    <div class="col">
+        <h3>Game Description:</h3>
+        {{game.gamedata.detailed_description |safe}}
+    </div>
+</div>
 {% endblock content %}
