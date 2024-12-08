@@ -3,33 +3,37 @@
 <div class="row" style="background-color: #BCC0C7;">
     <div class="col-7">
         <div class = "game_container">
-            <h3>{{game.name}}</h3>
+            <h3 style="margin-top: 15px;">{{game.name}}</h3>
             <img src="{{game.gamedata.header_image}}" alt="Flowers in Chania" style="width: 100%; height: auto;"></a>
             <p></p>
         </div>
     </div>
     <div class="col-5">
-        <h3 style="margin-top: 35px;">Game Summary:</h3>
+        <h3 style="margin-top: 50px;">Game Summary:</h3>
         <p>{{game.gamedata.short_description}}</p>
     </div>
 </div>
 <div class="row" style="background-color: #BCC0C7;">
     <div class="col-8">
+        <hr>
         <h3>Supported Languages:</h3>
         <p>{{game.gamedata.supported_languages |safe}}</p>
     </div>
     <div class="col-4">
+        <hr>
         {% if game.gamedata.is_free %}
-            <p>Game is free to play!</p>
+            <h3>Game is free to play!</h3>
         {% else %}
-            <p>Game is not free to play</p>
+            <h3>Game is not free to play</h3>
         {% endif %}
     </div>
 </div>
 <div class="row" style="background-color: #BCC0C7;">
     <div class="col">
+        <hr>
         <h3>Game Description:</h3>
         {{game.gamedata.detailed_description |safe}}
+        <hr>
     </div>
 </div>
 {% endblock content %}
