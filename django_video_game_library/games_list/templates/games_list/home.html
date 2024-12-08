@@ -1,5 +1,15 @@
 {% extends "base.html" %}
     {% block content %}
+
+
+    <h1 style="background: linear-gradient(to right, #8d80d8, #7EAFC4);
+  background-clip: text;
+  -webkit-text-fill-color: transparent;">
+        Platform for unbiased video game reviews
+    </h1>
+    <p style="color: #BCC0C7;">A place where everyone can review their favorite video games, unburdened by the watchfull eyes of Steam and Epic</p>
+
+
     <ul class="list-group">
         {% for paginator_game in paginator %}
         <a href="games-list/game/{{paginator_game.appid}}" class="list-group-item list-group-item-action list-group-item-dark">
