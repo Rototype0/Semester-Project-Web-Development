@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'reviews.apps.ReviewsConfig',
     'games_list',
+    'user_authentication',
 ]
 
 MIDDLEWARE = [

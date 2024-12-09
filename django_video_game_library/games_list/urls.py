@@ -21,5 +21,7 @@ from . import views
 urlpatterns = [
     path('home/', views.List, name='game_lib_home'),
     path('game/<str:appid>/', views.Game_Info, name='game_lib_game'),
-    path('about/', views.About, name='game_lib_about')
+    path('about/', views.About, name='game_lib_about'),
+    path('user_authentication/', include('django.contrib.auth.urls')),
+    path('user_authentication/', include 'user_authentication.urls'),
 ]
