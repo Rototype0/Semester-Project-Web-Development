@@ -21,5 +21,7 @@ from . import views
 urlpatterns = [
     path('importjson/', views.import_data, name='import_json'),
     path('game/<str:appid>/', views.Game_Info, name='game_lib_game'),
-    path('about/', views.About, name='game_lib_about')
+    path('about/', views.About, name='game_lib_about'),
+    path('search_games', views.search_games, name='search-games'),
+
 ]

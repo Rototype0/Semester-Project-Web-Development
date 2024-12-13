@@ -55,3 +55,4 @@ def About(request):
         'title': 'About',
     }
     return render(request, 'games_list/about.html', context)
+

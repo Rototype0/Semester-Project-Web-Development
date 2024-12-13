@@ -80,3 +80,16 @@ def import_data(request):
 
 def About(request):
     return render(request, 'games_list/about.html')
+
+def search_games(request):
+    if request.method == "POST":
+        searched = request.POST['searched']
+        games = Game.objects.filter(name__icontains=searched)
+        if not searched:
+            
+            return render(request, 'games_list/search_games.html', {})
+        else:
+            return render(request, 'games_list/search_games.html', {'searched':searched, 'games':games})
+    else:
+        return render(request, 'games_list/search_games.html', {})
+
