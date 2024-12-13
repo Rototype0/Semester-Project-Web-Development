@@ -1,0 +1,36 @@
+body
+{
+    margin-top: 80px;
+    margin-bottom: 100px;
+    background-color: #2F3440;
+}
+
+.page_controls
+{
+    color: #2F3440;
+}
+
+/* unvisited link */
+.page_controls:link {
+    color: #2F3440;
+  }
+  
+  /* visited link */
+  a:visited {
+    color: #2F3440;
+  }
+  
+  /* mouse over link */
+  a:hover {
+    color: #4f5768;
+  }
+  
+  /* selected link */
+  a:active {
+    color: #2F3440
+  }
+
+.img-thumbnail
+{
+    max-height: 80px;
+}

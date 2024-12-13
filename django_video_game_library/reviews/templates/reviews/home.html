@@ -1,10 +1,51 @@
 {% extends "reviews/base.html" %}
+<h1>{{ game.name }}</h1>
+
+<h2>Reviews</h2>
+{% if reviews %}
+    <ul>
+        {% for review in reviews %}
+            <li>
+                <strong>{{ review.header }}</strong>: {{ review.content }}
+                <br>
+                <em>By {{ review.author.username }} on {{ review.date_posted }}</em>
+                <ul>
+                    {% for rating in review.ratings.all %}
+                        <li>Rating: {{ rating.score }} by {{ rating.user.username }}</li>
+                    {% endfor %}
+                </ul>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No reviews available for this game.</p>
+{% endif %}
+
+<h2>Ratings</h2>
+{% if ratings %}
+    <ul>
+        {% for rating in ratings %}
+            <li>
+                Rating: {{ rating.score }} by {{ rating.user.username }}
+                {% if rating.review %}
+                    (Linked to review: "{{ rating.review.header }}")
+                {% endif %}
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <p>No ratings available for this game.</p>
+{% endif %}
+
+
+<!--{% extends "reviews/base.html" %}
     {% block content %}
     <h1>Reviews Home</h1>
     {% for review in reviews %}
     <div class = "review_container">
-        <p>{{review.content}}</p>
-        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}}</small>
+        <p>{{review.header}}</p>
+        <h4>{{review.content}}</h4>
+        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}} with rating <li name = "rating-list">{{ rating.rating }}</li></small>
     </div>
     {% endfor %}
-{% endblock content %}
+{% endblock content %}-->
