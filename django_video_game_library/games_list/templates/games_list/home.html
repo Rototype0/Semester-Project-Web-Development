@@ -35,17 +35,23 @@
         </a>
         {% endfor %}
         <li class="list-group-item list-group-item-action list-group-item-dark">
-            <div class="d-flex justify-content-center">
-                <a href="?page=1" class="page_controls">First</a>
-                {% if paginator.has_previous %}
-                    <a href="?page={{paginator.previous_page_number}}" class="page_controls">Previous</a>
-                {% endif %}
-                <p> {{paginator}} </p>
-                {% if paginator.has_next %}
-                    <a href="?page={{paginator.next_page_number}}" class="page_controls">Next</a>
-                {% endif %}
-                <a href="?page={{paginator.paginator.num_pages}}" class="page_controls">Last</a>
-            </div>
+            <center>
+                <div class="btn-group" role="group" aria-label="Basic example">
+                    {% if paginator.has_previous %}
+                        <a href="?page={{paginator.previous_page_number}}" class="btn btn-secondary"> < </a>
+                    {% else %}
+                        <a class="btn btn-secondary disabled"> < </a>
+                    {% endif %}
+                    <a href="?page=1" class="btn btn-secondary"> 1 </a>
+                    <a class="btn btn-secondary active"> {{paginator.number}} </a>
+                    <a href="?page={{paginator.paginator.num_pages}}" class="btn btn-secondary"> {{paginator.paginator.num_pages}} </a>
+                    {% if paginator.has_next %}
+                        <a href="?page={{paginator.next_page_number}}" class="btn btn-secondary"> > </a>
+                    {% else %}
+                        <a class="btn btn-secondary disabled"> > </a>
+                    {% endif %}
+                </div>
+            </center>
         </li>
     </ul>
 {% endblock content %}

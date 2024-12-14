@@ -60,12 +60,13 @@ def fetch_reviews_for_multiple_apps(appids):
 
 def Games_List(request):
 
+    games_per_page = 20
     paginator = None
     if request.method == "POST":
             searched = request.POST['searched']
-            paginator = Paginator(Game.objects.filter(name__icontains=searched), 21)
+            paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
     else: 
-        paginator = Paginator(Game.objects.all(), 21)
+        paginator = Paginator(Game.objects.all(), games_per_page)
     
     page = request.GET.get('page')
 
