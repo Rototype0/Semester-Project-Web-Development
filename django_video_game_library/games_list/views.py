@@ -18,11 +18,13 @@ def Game_Info(request, appid):
         reviews[1]['query_summary'].update({'review_score': round(reviews_score * 10, 1)})
 
     price_query = fetch_app_price(appid)
-    price_overview = price_query[1].get(str(appid),{}).get('data', {}).get('price_overview', {})
+    price_overview = {}
     if price_overview != None:
         if price_query[1].get(str(appid),{}).get('success', False):
-            price_overview['initial'] = price_overview.get('initial') / 100
-            price_overview['final'] = price_overview.get('final') / 100
+            if price_query[1].get(str(appid),{}).get('data', []) != []:
+                price_overview = price_query[1].get(str(appid),{}).get('data', {}).get('price_overview', {})
+                price_overview['initial'] = price_overview.get('initial') / 100
+                price_overview['final'] = price_overview.get('final') / 100
 
     return render(request, 'games_list/game.html', {'game': game, 'reviews': reviews_summary, 'price_overview': price_overview})
 
