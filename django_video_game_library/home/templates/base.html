@@ -39,10 +39,10 @@
                 Playlist
               </a>
               <ul class="navbar-nav mr-auto">
-                <form class="d-flex" method=POST>
+                <form class="d-flex" method=POST action="{% url 'games_list' %}">
                   {% csrf_token %}
                   <input class="form-control me-2" type="search" placeholder="Search Games" aria-label="Search" name="searched">
-                  <button class="btn btn-outline-success" type="submit">Search</button>
+                  <button class="btn btn-success" type="submit">Search</button>
                 </form>
               </ul>
               <ul class="navbar-nav ml-auto">
