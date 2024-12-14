@@ -24,8 +24,8 @@ def Game_Info(request, appid):
         if data_query[1].get(str(appid),{}).get('success', False):
             if data_query[1].get(str(appid),{}).get('data', []) != []:
                 price_overview = data_query[1].get(str(appid),{}).get('data', {}).get('price_overview', {})
-                price_overview['initial'] = price_overview.get('initial') / 100
-                price_overview['final'] = price_overview.get('final') / 100
+                price_overview['initial'] = price_overview.get('initial', 1) / 100
+                price_overview['final'] = price_overview.get('final', 1) / 100
                 game_info = data_query[1].get(str(appid),{}).get('data', [])
 
     return render(request, 'games_list/game.html', {'game': game, 'reviews': reviews_summary, 'price_overview': price_overview, 'game_info': game_info})
