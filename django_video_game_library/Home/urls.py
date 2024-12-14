@@ -14,5 +14,6 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path('', include("games_list.urls"), name='home'),
+    path('auth/', include("user_authentication.urls",)),
     path('about/', views.About, name='about'),
 ]

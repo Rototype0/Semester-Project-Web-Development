@@ -12,7 +12,7 @@
 
     <ul class="list-group">
         {% for paginator_game in paginator %}
-        <a href="games-list/game/{{paginator_game.appid}}" class="list-group-item list-group-item-action list-group-item-dark">
+        <a href="game/{{paginator_game.appid}}" class="list-group-item list-group-item-action list-group-item-dark">
             <div class="row">
                 <div class="col-2">           
                     <img src="{{paginator_game.gamedata.header_image}}" alt="Flowers in Chania" class="img-thumbnail">

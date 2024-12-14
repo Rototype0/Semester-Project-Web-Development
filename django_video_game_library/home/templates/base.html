@@ -30,13 +30,30 @@
       {% endif %}
 
         <nav class="navbar navbar-expand-lg fixed-top navbar-dark" style="background-color: #6A4C93;"> 
-            <a class="navbar-brand" href="/">
-                <img src="https://cdn.icon-icons.com/icons2/57/PNG/256/nintendoNES_11484.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                Playlist</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
+              <a class="navbar-brand" href="/">
+                <img src="https://cdn.icon-icons.com/icons2/57/PNG/256/nintendoNES_11484.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                Playlist
+              </a>
+              <ul class="navbar-nav ml-auto">
+                {% if user.is_authenticated %}
+                <li class="nav_item">
+                  <a class="nav-link" href="{% url 'game_lib_logout' %}">Logout</a>
+                </li>
+                {% else %}
+
+                <li class="nav_item">
+                  <a class="nav-link" href="{% url 'game_lib_register' %}">Register</a>
+                </li>
+
+                <li class="nav_item my-2 my-lg-0">
+                  <a class="nav-link " href="{% url 'game_lib_login' %}">Login</a>
+                </li>
+                {% endif %}
+              </ul>
             </div>
           </nav>
 

@@ -11,7 +11,7 @@ def login_user(request):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return redirect('game_lib_home')
+            return redirect('games_list')
         else:
             messages.success(request, ("There was an error loging in. Please try again!"))
             return redirect('game_lib_login')
@@ -21,7 +21,7 @@ def login_user(request):
 def logout_user(request):
     logout(request)
     messages.success(request, ("You were logged out!"))
-    return redirect('game_lib_home')
+    return redirect('games_list')
 
 def register_user(request):
     if request.method == "POST":
@@ -33,7 +33,7 @@ def register_user(request):
             user = authenticate(username = username, password = password)
             login(request, user)
             messages.success(request, ("Registration successful!"))
-            return redirect('game_lib_home')
+            return redirect('games_list')
     else:
         form = RegisterUserForm()  
 

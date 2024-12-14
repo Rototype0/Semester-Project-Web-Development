@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'reviews.apps.ReviewsConfig',
     'games_list',
     'home',
-    'user_authentication'
+    'user_authentication',
 ]
 
 MIDDLEWARE = [
