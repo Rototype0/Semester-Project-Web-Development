@@ -48,6 +48,9 @@
               <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <li class="nav_item">
+                  <a class="nav-link" href="{% url 'game_lib_update_user' %}">Profile</a>
+                </li>
+                <li class="nav_item">
                   <a class="nav-link" href="{% url 'game_lib_logout' %}">Logout</a>
                 </li>
                 {% else %}
