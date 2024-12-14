@@ -1,7 +1,9 @@
 from django.shortcuts import render
 from .models import Review, Rating
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from games_list.models import Game
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 #from .models import Review, Rating
 
 def Demo(request):
@@ -23,6 +25,30 @@ def Home(request, appid):
         'reviews': reviews,
         'ratings': ratings,
     })
+
+def like_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id)
+    if request.user in review.likes.all():
+        review.likes.remove(request.user)  # Unlike
+    else:
+        review.likes.add(request.user)  # Like
+    return redirect(reverse('review-detail', args=[review_id]))
+
+"""def Likes(request, appid):       #what is post_id in this case
+    user = request.user
+    rev = Review.objects.get(appid = appid)
+    current_likes = rev.likes
+    liked = Likes.objects.filter(user = request.user, rev = rev).count()
+    if not liked:
+        liked = Likes.objects.create(user = request.user, rev = rev)
+        current_likes = current_likes+1
+    else:
+        liked = Likes.objects.filter(user = request.user, rev = rev).delete()
+        current_likes = current_likes-1
+    rev.likes = current_likes
+    rev.save()
+    return HttpResponseRedirect(reverse('reviews', args=[appid]))"""
+
 
 """def Home(request):
     reviews = Review.objects.all()

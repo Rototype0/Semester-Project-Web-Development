@@ -9,6 +9,18 @@
                 <strong>{{ review.header }}</strong>: {{ review.content }}
                 <br>
                 <em>By {{ review.author.username }} on {{ review.date_posted }}</em>
+
+                <!-- Like/Unlike Form -->
+                <form method="POST" action="{% url 'like-review' review.id %}">
+                    {% csrf_token %}
+                    {% if user in review.likes.all %}
+                        <button type="submit">Unlike</button>
+                    {% else %}
+                        <button type="submit">Like</button>
+                    {% endif %}
+                </form>
+                <p>Likes: {{ review.total_likes }}</p>
+
                 <ul>
                     {% for rating in review.ratings.all %}
                         <li>Rating: {{ rating.score }} by {{ rating.user.username }}</li>
