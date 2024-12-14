@@ -60,8 +60,8 @@ def Games_List(request):
 
     paginator = None
     if request.method == "POST":
-        searched = request.POST['searched']
-        paginator = Paginator(Game.objects.filter(name__icontains=searched), 21)
+            searched = request.POST['searched']
+            paginator = Paginator(Game.objects.filter(name__icontains=searched), 21)
     else: 
         paginator = Paginator(Game.objects.all(), 21)
     

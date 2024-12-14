@@ -6,36 +6,38 @@ from .forms import RegisterUserForm
 
 def login_user(request):
     if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
+        username = request.POST["username"]
+        password = request.POST["password"]
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return redirect('games_list')
+            
         else:
-            messages.success(request, ("There was an error loging in. Please try again!"))
-            return redirect('game_lib_login')
+            messages.success(request, ("There was an error logging in, try again."))
+            return redirect('login')        
+            
     else:
         return render(request, 'authenticate/login.html', {})
 
 def logout_user(request):
     logout(request)
-    messages.success(request, ("You were logged out!"))
     return redirect('games_list')
+
 
 def register_user(request):
     if request.method == "POST":
         form = RegisterUserForm(request.POST)
         if form.is_valid():
-            form.save
+            form.save()
             username = form.cleaned_data['username']
             password = form.cleaned_data['password1']
-            user = authenticate(username = username, password = password)
+            user = authenticate(username=username, password=password)
             login(request, user)
             messages.success(request, ("Registration successful!"))
             return redirect('games_list')
     else:
-        form = RegisterUserForm()  
+        form = RegisterUserForm()
 
-    return render(request, 'authenticate/register_user.html', {'form':form,})
-    
+    context = {'form':form,}
+    return render(request, 'authenticate/register_user.html', context)

@@ -3,21 +3,24 @@
 {% block content %}
 
 <main class="content">
-    <h1>Login</h1>
-<br/>
-    <form action="" method="post">
-        {% csrf_token %}
-        <form>
-            <div class="form-group">
-              <label for="exampleInputEmail1">Username</label>
-              <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
-            </div>
-            <div class="form-group">
-              <label for="exampleInputPassword1">Password</label>
-              <input type="password" class="form-control" name="password" placeholder="Password">
-            </div>
-        <input type="submit" value="Submit" class="btn btn-secondary">
-    </form>
-
+  <div class="row" style="background-color: #BCC0C7;">
+    <div class="col">
+      <form method="POST">
+          {% csrf_token %}
+          <form>
+            <h1>Login</h1>
+              <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" class="form-control" name="username" aria-describedby="emailHelp" placeholder="Enter username">
+              </div>
+              <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" name="password" placeholder="Password">
+              </div>
+          <input type="submit" value="Submit" class="btn btn-secondary">
+          <p></p>
+      </form>
+    </div>
+  </div>
 </main>
 {% endblock content %}
