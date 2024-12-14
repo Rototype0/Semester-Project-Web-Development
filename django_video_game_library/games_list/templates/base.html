@@ -11,10 +11,10 @@
         <li><a href="{% url 'game_lib_about' %}">About</a></li>
        
         {% if user.is_authenticated %}
-       <li><a href="{% url 'game_lib_login' %}">Logout</a></li>
-       {% else %}
-            <li><a href="{% url 'game_lib_register' %}">Register</a></li>
-            <li><a href="{% url 'game_lib_logout' %}">Login</a></li>
+        <li><a href="{% url 'game_lib_logout' %}">Logout</a></li>
+        {% else %}
+        <li><a href="{% url 'game_lib_register' %}">Register</a></li>
+        <li><a href="{% url 'game_lib_login' %}">Login</a></li>
         {% endif %}
     </ul>
 
