@@ -38,6 +38,13 @@
                 <img src="https://cdn.icon-icons.com/icons2/57/PNG/256/nintendoNES_11484.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 Playlist
               </a>
+              <ul class="navbar-nav mr-auto">
+                <form class="d-flex" method=POST>
+                  {% csrf_token %}
+                  <input class="form-control me-2" type="search" placeholder="Search Games" aria-label="Search" name="searched">
+                  <button class="btn btn-outline-success" type="submit">Search</button>
+                </form>
+              </ul>
               <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
                 <li class="nav_item">

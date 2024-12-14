@@ -58,21 +58,34 @@ def fetch_reviews_for_multiple_apps(appids):
 
 def Games_List(request):
 
-    paginator = Paginator(Game.objects.all(), 21)
+    paginator = None
+    if request.method == "POST":
+        searched = request.POST['searched']
+        #apps_as_dict = list(Game.objects.filter(name__icontains=searched).values())
+        paginator = Paginator(Game.objects.filter(name__icontains=searched), 21)
+        #print(apps_as_dict)
+    else: 
+        paginator = Paginator(Game.objects.all(), 21)
+    
     page = request.GET.get('page')
 
     if page == None:
         page = 1
     
-    
     paginator_page = paginator.get_page(page)
-    apps = paginator.page(page)
+    apps = paginator.get_page(page)
 
     apps_as_dict = list(apps.object_list.values())
 
+    if request.method == "POST":
+        searched = request.POST['searched']
+        apps_as_dict = list(Game.objects.filter(name__icontains=searched).values())
+        paginator_page = Game.objects.filter(name__icontains=searched)
+        print(apps_as_dict)
+
     appids = []
-    for app in apps:
-        appids.append(app.appid)
+    for app in apps_as_dict:
+        appids.append(app['appid'])
 
     reviews = fetch_reviews_for_multiple_apps(appids)
 
