@@ -34,3 +34,12 @@ body
 {
     max-height: 80px;
 }
+
+.game_desc{
+
+  img {
+    width:100%;
+    height:auto;
+    object-fit: contain;
+  }
+}

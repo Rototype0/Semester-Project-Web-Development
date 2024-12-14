@@ -17,19 +17,21 @@ def Game_Info(request, appid):
         reviews_score = total_positive_reviews / total_reviews
         reviews[1]['query_summary'].update({'review_score': round(reviews_score * 10, 1)})
 
-    price_query = fetch_app_price(appid)
+    data_query = fetch_app_data(appid)
     price_overview = {}
+    game_info = {}
     if price_overview != None:
-        if price_query[1].get(str(appid),{}).get('success', False):
-            if price_query[1].get(str(appid),{}).get('data', []) != []:
-                price_overview = price_query[1].get(str(appid),{}).get('data', {}).get('price_overview', {})
+        if data_query[1].get(str(appid),{}).get('success', False):
+            if data_query[1].get(str(appid),{}).get('data', []) != []:
+                price_overview = data_query[1].get(str(appid),{}).get('data', {}).get('price_overview', {})
                 price_overview['initial'] = price_overview.get('initial') / 100
                 price_overview['final'] = price_overview.get('final') / 100
+                game_info = data_query[1].get(str(appid),{}).get('data', [])
 
-    return render(request, 'games_list/game.html', {'game': game, 'reviews': reviews_summary, 'price_overview': price_overview})
+    return render(request, 'games_list/game.html', {'game': game, 'reviews': reviews_summary, 'price_overview': price_overview, 'game_info': game_info})
 
-def fetch_app_price(appid):
-    url = f"https://store.steampowered.com/api/appdetails?filters=price_overview&appids={appid}"
+def fetch_app_data(appid):
+    url = f"https://store.steampowered.com/api/appdetails?appids={appid}"
     try:
         response = requests.get(url)
         response.raise_for_status()  # Raise exception for HTTP errors

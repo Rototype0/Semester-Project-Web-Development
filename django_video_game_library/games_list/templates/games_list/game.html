@@ -31,7 +31,9 @@
     <div class="col-8">
         <hr>
         <h3>Game Description:</h3>
-        {{game.gamedata.detailed_description |safe}}
+        <div class="game_desc">
+            {{game.gamedata.detailed_description |safe}}
+        </div>
     </div>
     <div class="col-4">
         <hr>
@@ -47,9 +49,23 @@
     <div class="col-4">
         <hr>
         <h3>Developers:</h3>
-        <p>{{steam_spy_info.developer}}</p>
+        <p>
+            {% for developer in game_info.developers %}
+                {{developer}}
+                {% if forloop.counter != game_info.developers|length %}
+                    , 
+                {% endif %}
+            {% endfor %}
+        </p>
         <h3>Publishers:</h3>
-        <p>{{steam_spy_info.publisher}}</p>
+        <p>
+            {% for publisher in game_info.publishers %}
+                {{publisher}}
+                {% if forloop.counter != game_info.publishers|length %}
+                    , 
+                {% endif %}
+            {% endfor %}
+        </p>
     </div>
     <div class="col-8">
         <hr>
