@@ -7,7 +7,7 @@
         <h1 style="color: white;">You searched for {{ searched }}</h1>
         <br/>
         {% for game in games %}
-            {{ game }} <br/>
+            {{ game.name }} <br/>
         {% endfor %}
     {% else %}
         <h1 style="color: white;">Hey! You forgot to search for a game...</h1>
