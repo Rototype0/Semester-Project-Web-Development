@@ -23,7 +23,11 @@
                 <div class="col-4">
                     {% for game in games %}
                         {% if forloop.parentloop.counter0 == forloop.counter0 %}
-                            <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
+                            {% if game.review_score_desc == 'No user reviews' %}
+                                <p>{{game.review_score_desc}}</p>
+                            {% else %}
+                                <p>{{game.review_score}}/10, {{game.review_score_desc}}</p>
+                            {% endif %}
                         {% endif %}
                     {% endfor %}
                 </div>

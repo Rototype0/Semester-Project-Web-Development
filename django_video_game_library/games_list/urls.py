@@ -20,6 +20,6 @@ from . import views
 
 urlpatterns = [
     path('importjson/', views.import_data, name='import_json'),
+    path('', views.Games_List, name='games_list'),
     path('game/<str:appid>/', views.Game_Info, name='game_lib_game'),
-    path('about/', views.About, name='game_lib_about')
 ]
