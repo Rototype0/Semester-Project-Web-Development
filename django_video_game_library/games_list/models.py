@@ -15,4 +15,9 @@ class GameData(models.Model):
     supported_languages = models.TextField(default="english")
     short_description = models.TextField(default="no description was provided")
     header_image = models.URLField(default="no header image was provided")
+    price_currency = models.CharField(max_length=20,default="")
+    price_initial = models.IntegerField(default=0)
+    price_final = models.IntegerField(default=0)
+    price_discount_percent = models.IntegerField(default=0)
+    price_final_formatted = models.CharField(max_length=20,default="")
     

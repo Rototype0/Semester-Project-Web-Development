@@ -21,10 +21,17 @@
     </div>
     <div class="col-4">
         <hr>
-        {% if game.gamedata.is_free %}
-            <h3>Game is free to play!</h3>
+        <h1>Reviews:</h1>
+        {% if reviews.review_score_desc == 'No user reviews' %}
+            <p>Steam Reviews: {{reviews.review_score_desc}}</p>
         {% else %}
-            <h3>Game is not free to play</h3>
+            <p>Steam Reviews: {{reviews.review_score}}/10, {{reviews.review_score_desc}}</p>
+        {% endif %}
+
+        {% if game.gamedata.is_free %}
+            <b>Game is free to play!</b>
+        {% else %}
+            <b>Game is not free to play</b>
         {% endif %}
     </div>
 </div>
