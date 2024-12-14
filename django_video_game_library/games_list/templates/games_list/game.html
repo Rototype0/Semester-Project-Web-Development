@@ -11,6 +11,20 @@
     <div class="col-5">
         <h3 style="margin-top: 50px;">Game Summary:</h3>
         <p>{{game.gamedata.short_description}}</p>
+
+        {% if game.gamedata.is_free %}
+            <h3>Game is free to play!</h3>
+        {% else %}
+            {% if price_overview.discount_percent == 0 %}
+                <h3>{{price_overview.final}} {{price_overview.currency}}</h3>
+            {% else %}
+            <s>{{price_overview.initial}} {{price_overview.currency}}</s>
+            <h3>
+                {{price_overview.final}} {{price_overview.currency}}
+                <span class="badge bg-success">-{{price_overview.discount_percent}}%</span> 
+            </h3>
+            {% endif %}
+        {% endif %}
     </div>
 </div>
 <div class="row" style="background-color: #BCC0C7;">
@@ -26,17 +40,6 @@
             <p>Steam Reviews: {{reviews.review_score_desc}}</p>
         {% else %}
             <p>Steam Reviews: {{reviews.review_score}}/10, {{reviews.review_score_desc}}</p>
-        {% endif %}
-
-        {% if game.gamedata.is_free %}
-            <h3>Game is free to play!</h3>
-        {% else %}
-            {% if price_overview.discount_percent == 0 %}
-                <h3>{{price_overview.final}}{{price_overview.currency}}</h3>
-            {% else %}
-                <h3>-{{price_overview.discount_percent}}% {{price_overview.final}}{{price_overview.currency}}</h3>
-                <b><s>{{price_overview.initial}}{{price_overview.currency}}</s></b>
-            {% endif %}
         {% endif %}
     </div>
 </div>

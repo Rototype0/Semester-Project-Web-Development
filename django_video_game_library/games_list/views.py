@@ -77,12 +77,6 @@ def Games_List(request):
 
     apps_as_dict = list(apps.object_list.values())
 
-    if request.method == "POST":
-        searched = request.POST['searched']
-        apps_as_dict = list(Game.objects.filter(name__icontains=searched).values())
-        paginator_page = Game.objects.filter(name__icontains=searched)
-        print(apps_as_dict)
-
     appids = []
     for app in apps_as_dict:
         appids.append(app['appid'])
