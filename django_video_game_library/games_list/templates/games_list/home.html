@@ -34,6 +34,7 @@
             </div>
         </a>
         {% endfor %}
+        {% if is_showing_search_result == False %}
         <li class="list-group-item list-group-item-action list-group-item-dark">
             <center>
                 <div class="btn-group" role="group" aria-label="Basic example">
@@ -53,5 +54,6 @@
                 </div>
             </center>
         </li>
+        {% endif %}
     </ul>
 {% endblock content %}

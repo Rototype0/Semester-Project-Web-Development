@@ -60,11 +60,13 @@ def fetch_reviews_for_multiple_apps(appids):
 
 def Games_List(request):
 
+    is_showing_search_result = False
     games_per_page = 20
     paginator = None
     if request.method == "POST":
             searched = request.POST['searched']
             paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
+            is_showing_search_result = True
     else: 
         paginator = Paginator(Game.objects.all(), games_per_page)
     
@@ -97,7 +99,7 @@ def Games_List(request):
 
         app.update(reviews[app['appid']]['query_summary'])
 
-    return render(request, 'games_list/home.html', {'games': apps_as_dict, 'paginator': paginator_page})
+    return render(request, 'games_list/home.html', {'games': apps_as_dict, 'paginator': paginator_page, 'is_showing_search_result': is_showing_search_result})
 
 def import_data(request):
     if request.method == 'POST' and request.FILES['json_file']:
