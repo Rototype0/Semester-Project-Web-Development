@@ -65,31 +65,52 @@ def Games_List(request):
 
     if request.method == "POST":
         searched = request.POST['searched']
-        paginator = Paginator(Game.objects.filter(name__icontains=searched).select_related('gamedata'), games_per_page)
+        paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
         is_showing_search_result = True
     else:
-        paginator = Paginator(Game.objects.all().select_related('gamedata'), games_per_page)
-    
+        paginator = Paginator(Game.objects.all(), games_per_page)
+
     page = request.GET.get('page')
+
     if page is None:
         page = 1
-    
+
     paginator_page = paginator.get_page(page)
     apps = paginator.get_page(page)
 
-    # Include related GameData fields in qs_json
-    apps_as_dict = list(apps.object_list.values(
-        'appid', 'name', 'gamedata__header_image'
-    ))
+    apps_as_dict = list(apps.object_list.values())
 
+    appids = []
+    for app in apps_as_dict:
+        appids.append(app['appid'])
+
+    reviews = fetch_reviews_for_multiple_apps(appids)
+
+    for app in apps_as_dict:
+        total_reviews = reviews[app['appid']]['query_summary']['total_reviews']
+        if total_reviews != 0:
+            total_positive_reviews = reviews[app['appid']]['query_summary']['total_positive']
+            reviews_score = total_positive_reviews / total_reviews
+            reviews[app['appid']]['query_summary'].update({'review_score': round(reviews_score * 10, 1)})
+        else:
+            print(app['name'] + ' has zero reviews')
+
+        app.update({
+            'review_score': reviews[app['appid']]['query_summary'].get('review_score', 0),
+            'review_score_desc': reviews[app['appid']]['query_summary'].get('review_score_desc', 'No user reviews'),
+        })
+
+    # Prepare qs_json with the updated apps_as_dict
     qs_json = json.dumps(apps_as_dict)
 
+    # Pass everything to the template
     return render(request, 'games_list/home.html', {
         'games': apps_as_dict,
         'paginator': paginator_page,
         'is_showing_search_result': is_showing_search_result,
-        'qs_json': qs_json  # Pass serialized game data to the template
+        'qs_json': qs_json  # Ensure this is passed for live search
     })
+
 
 
 def import_data(request):
@@ -164,20 +185,24 @@ def import_data(request):
 def live_search(request):
     query = request.GET.get('q', '')  # Get query from the request
     if query:
-        # Query Game objects and include related GameData fields
         games = Game.objects.filter(name__icontains=query).select_related('gamedata').values(
             'appid', 'name', 'gamedata__header_image'
         )
 
-        # Handle missing GameData and add default placeholders
-        results = [
-            {
+        # Fetch ratings for each game (mock implementation, replace with real logic)
+        results = []
+        for game in games:
+            # Example: Replace this with your actual logic for fetching ratings
+            review_score = 8.5  # Placeholder for the review score
+            review_score_desc = "Very Positive"  # Placeholder for the review description
+            
+            results.append({
                 'appid': game['appid'],
                 'name': game['name'],
-                'gamedata__header_image': game.get('gamedata__header_image') or 'path/to/placeholder-image.jpg'
-            }
-            for game in games
-        ]
+                'gamedata__header_image': game.get('gamedata__header_image') or 'path/to/placeholder-image.jpg',
+                'review_score': review_score,
+                'review_score_desc': review_score_desc
+            })
     else:
         results = []
 
