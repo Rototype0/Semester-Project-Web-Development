@@ -41,7 +41,8 @@
               <ul class="navbar-nav mr-auto">
                 <form class="d-flex" method=POST action="{% url 'games_list' %}">
                   {% csrf_token %}
-                  <input class="form-control me-2" type="search" placeholder="Search Games" aria-label="Search" name="searched">
+                  <input id="search_here" class="form-control me-2" type="search" placeholder="Search Games" aria-label="Search" name="searched">
+                  <div id="resultsContainer"></div>
                   <button class="btn btn-success" type="submit">Search</button>
                 </form>
               </ul>
@@ -69,6 +70,35 @@
 
         {% block content %}
         {% endblock %}
+
+        {% block script %}
+            <script>
+              const data = '{{ qs_json|safe }}'; // Ensure qs_json is safe for rendering
+              console.log(data);
+              
+              const rdata = JSON.parse(data.replace(/&quot;/g, '"'));
+              console.log(rdata);
+              
+              const input = document.getElementById('search_here');
+              const box = document.getElementById('resultsContainer');
+              
+              let filteredArr = [];
+              
+              input.addEventListener('keyup', (e) => {
+                box.innerHTML = ""; // Clear previous results
+                filteredArr = rdata.filter((info) =>
+                  info['name'].toLowerCase().includes(e.target.value.toLowerCase())
+                );
+                if (filteredArr.length > 0) {
+                  filteredArr.map((item) => {
+                    const div = document.createElement('div');
+                    div.textContent = item['name'];
+                    box.appendChild(div);
+                  });
+                }
+              });              
+            </script>
+        {% endblock script %}
         
         <footer class="card-footer fixed-bottom" style="background-color: #6A4C93;  border-radius: 0%;">
             <div class="footer-text" style="color: #ffffff;">This project was made by Group 9 </div>

@@ -4,7 +4,7 @@ from games_list.models import GameData
 from django.core.paginator import Paginator
 import json, time, math, requests
 from concurrent.futures import ThreadPoolExecutor
-
+from django.http import JsonResponse
 
 def Game_Info(request, appid):
     game = Game.objects.filter(appid=appid).first()
@@ -59,20 +59,19 @@ def fetch_reviews_for_multiple_apps(appids):
     return results
 
 def Games_List(request):
-
     is_showing_search_result = False
     games_per_page = 20
     paginator = None
+
     if request.method == "POST":
-            searched = request.POST['searched']
-            paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
-            is_showing_search_result = True
-    else: 
+        searched = request.POST['searched']
+        paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
+        is_showing_search_result = True
+    else:
         paginator = Paginator(Game.objects.all(), games_per_page)
     
     page = request.GET.get('page')
-
-    if page == None:
+    if page is None:
         page = 1
     
     paginator_page = paginator.get_page(page)
@@ -80,15 +79,13 @@ def Games_List(request):
 
     apps_as_dict = list(apps.object_list.values())
 
-    appids = []
-    for app in apps_as_dict:
-        appids.append(app['appid'])
+    # Serialize game data for live search
+    qs_json = json.dumps(apps_as_dict)
 
+    appids = [app['appid'] for app in apps_as_dict]
     reviews = fetch_reviews_for_multiple_apps(appids)
 
     for app in apps_as_dict:
-        #print(app['name'])
-        #print(reviews[app['appid']]['query_summary'])
         total_reviews = reviews[app['appid']]['query_summary']['total_reviews']
         if total_reviews != 0:
             total_positive_reviews = reviews[app['appid']]['query_summary']['total_positive']
@@ -99,7 +96,12 @@ def Games_List(request):
 
         app.update(reviews[app['appid']]['query_summary'])
 
-    return render(request, 'games_list/home.html', {'games': apps_as_dict, 'paginator': paginator_page, 'is_showing_search_result': is_showing_search_result})
+    return render(request, 'games_list/home.html', {
+        'games': apps_as_dict,
+        'paginator': paginator_page,
+        'is_showing_search_result': is_showing_search_result,
+        'qs_json': qs_json  # Pass serialized game data to the template
+    })
 
 def import_data(request):
     if request.method == 'POST' and request.FILES['json_file']:
@@ -168,3 +170,13 @@ def import_data(request):
                     time.sleep(60)
         return render(request, 'success.html')
     return render(request, 'form.html')
+
+
+def live_search(request):
+    query = request.GET.get('q', '')
+    if query:
+        games = Game.objects.filter(name__icontains=query)
+    else:
+        games = Game.objects.none() 
+
+    return JsonResponse({"results": list(games.values('id', 'name'))})
