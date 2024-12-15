@@ -65,10 +65,10 @@ def Games_List(request):
 
     if request.method == "POST":
         searched = request.POST['searched']
-        paginator = Paginator(Game.objects.filter(name__icontains=searched), games_per_page)
+        paginator = Paginator(Game.objects.filter(name__icontains=searched).select_related('gamedata'), games_per_page)
         is_showing_search_result = True
     else:
-        paginator = Paginator(Game.objects.all(), games_per_page)
+        paginator = Paginator(Game.objects.all().select_related('gamedata'), games_per_page)
     
     page = request.GET.get('page')
     if page is None:
@@ -77,24 +77,12 @@ def Games_List(request):
     paginator_page = paginator.get_page(page)
     apps = paginator.get_page(page)
 
-    apps_as_dict = list(apps.object_list.values())
+    # Include related GameData fields in qs_json
+    apps_as_dict = list(apps.object_list.values(
+        'appid', 'name', 'gamedata__header_image'
+    ))
 
-    # Serialize game data for live search
     qs_json = json.dumps(apps_as_dict)
-
-    appids = [app['appid'] for app in apps_as_dict]
-    reviews = fetch_reviews_for_multiple_apps(appids)
-
-    for app in apps_as_dict:
-        total_reviews = reviews[app['appid']]['query_summary']['total_reviews']
-        if total_reviews != 0:
-            total_positive_reviews = reviews[app['appid']]['query_summary']['total_positive']
-            reviews_score = total_positive_reviews / total_reviews
-            reviews[app['appid']]['query_summary'].update({'review_score': round(reviews_score * 10, 1)})
-        else:
-            print(app['name'] + ' has zero reviews')
-
-        app.update(reviews[app['appid']]['query_summary'])
 
     return render(request, 'games_list/home.html', {
         'games': apps_as_dict,
@@ -102,6 +90,7 @@ def Games_List(request):
         'is_showing_search_result': is_showing_search_result,
         'qs_json': qs_json  # Pass serialized game data to the template
     })
+
 
 def import_data(request):
     if request.method == 'POST' and request.FILES['json_file']:
@@ -173,10 +162,23 @@ def import_data(request):
 
 
 def live_search(request):
-    query = request.GET.get('q', '')
+    query = request.GET.get('q', '')  # Get query from the request
     if query:
-        games = Game.objects.filter(name__icontains=query)
-    else:
-        games = Game.objects.none() 
+        # Query Game objects and include related GameData fields
+        games = Game.objects.filter(name__icontains=query).select_related('gamedata').values(
+            'appid', 'name', 'gamedata__header_image'
+        )
 
-    return JsonResponse({"results": list(games.values('id', 'name'))})
+        # Handle missing GameData and add default placeholders
+        results = [
+            {
+                'appid': game['appid'],
+                'name': game['name'],
+                'gamedata__header_image': game.get('gamedata__header_image') or 'path/to/placeholder-image.jpg'
+            }
+            for game in games
+        ]
+    else:
+        results = []
+
+    return JsonResponse({"results": results})

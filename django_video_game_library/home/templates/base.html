@@ -42,7 +42,6 @@
                 <form class="d-flex" method=POST action="{% url 'games_list' %}">
                   {% csrf_token %}
                   <input id="search_here" class="form-control me-2" type="search" placeholder="Search Games" aria-label="Search" name="searched">
-                  <div id="resultsContainer"></div>
                   <button class="btn btn-success" type="submit">Search</button>
                 </form>
               </ul>
@@ -79,24 +78,58 @@
               const rdata = JSON.parse(data.replace(/&quot;/g, '"'));
               console.log(rdata);
               
-              const input = document.getElementById('search_here');
-              const box = document.getElementById('resultsContainer');
+              document.addEventListener('DOMContentLoaded', () => {
+                const input = document.getElementById('search_here');
+                const resultsList = document.getElementById('resultsContainer'); // Only exists in home.html
               
-              let filteredArr = [];
+                if (input && resultsList) { // Ensure both exist before proceeding
+                  input.addEventListener('keyup', (e) => {
+                    const query = e.target.value;
               
-              input.addEventListener('keyup', (e) => {
-                box.innerHTML = ""; // Clear previous results
-                filteredArr = rdata.filter((info) =>
-                  info['name'].toLowerCase().includes(e.target.value.toLowerCase())
-                );
-                if (filteredArr.length > 0) {
-                  filteredArr.map((item) => {
-                    const div = document.createElement('div');
-                    div.textContent = item['name'];
-                    box.appendChild(div);
+                    if (query.length > 0) {
+                      fetch(`/live-search/?q=${query}`)
+                        .then((response) => response.json())
+                        .then((data) => {
+                          resultsList.innerHTML = ""; // Clear previous results
+              
+                          data.results.forEach((game) => {
+                            const listItem = document.createElement('a');
+                            listItem.href = `game/${game.appid}`;
+                            listItem.className = 'list-group-item list-group-item-action list-group-item-dark';
+              
+                            const rowDiv = document.createElement('div');
+                            rowDiv.className = 'row';
+              
+                            const imgCol = document.createElement('div');
+                            imgCol.className = 'col-2';
+                            const img = document.createElement('img');
+                            img.src = game.gamedata__header_image !== "no header image was provided"
+                              ? game.gamedata__header_image
+                              : "path/to/placeholder-image.jpg"; // Use a placeholder image
+                            img.alt = game.name;
+                            img.className = 'img-thumbnail';
+                            imgCol.appendChild(img);
+              
+                            const nameCol = document.createElement('div');
+                            nameCol.className = 'col-6';
+                            const nameHeading = document.createElement('h3');
+                            nameHeading.textContent = game.name;
+                            nameCol.appendChild(nameHeading);
+              
+                            rowDiv.appendChild(imgCol);
+                            rowDiv.appendChild(nameCol);
+              
+                            listItem.appendChild(rowDiv);
+                            resultsList.appendChild(listItem);
+                          });
+                        })
+                        .catch((error) => console.error('Error:', error));
+                    } else {
+                      resultsList.innerHTML = ""; // Clear results when input is empty
+                    }
                   });
                 }
-              });              
+              });               
             </script>
         {% endblock script %}
         

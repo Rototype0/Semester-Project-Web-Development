@@ -10,7 +10,7 @@
     <p style="color: #BCC0C7;">A place where everyone can review their favorite video games, unburdened by the watchfull eyes of Steam and Epic</p>
 
 
-    <ul class="list-group">
+    <ul id="resultsContainer" class="list-group">
         {% for paginator_game in paginator %}
         <a href="game/{{paginator_game.appid}}" class="list-group-item list-group-item-action list-group-item-dark">
             <div class="row">
