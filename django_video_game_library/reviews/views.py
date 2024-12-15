@@ -1,27 +1,35 @@
-from django.shortcuts import render
 from .models import Review, Rating
-from django.shortcuts import render, get_object_or_404
-from games_list.models import Game
-#from .models import Review, Rating
+from django.shortcuts import render, get_object_or_404, redirect
+from django.utils.timezone import now
+from games_list.models import Game, Avg
+from django.contrib.auth.models import User
+from django.utils.timezone import now
+from django.contrib.auth.decorators import login_required
 
-def Demo(request):
-    return render(request, 'reviews/demo.html')
-
-def About(request):
-    context = {
-        'title': 'About',
-    }
-    return render(request, 'reviews/about.html', context)
-
-def Home(request, appid):
+def Reviews(request, appid):
     game = get_object_or_404(Game, appid=appid)
-    reviews = Review.objects.filter(appid=appid)
+    reviews = Review.objects.filter(appid=appid).order_by('-date_posted')
     ratings = Rating.objects.filter(appid=appid)
+    avg_rating = ratings.aggregate(average=Avg('score'))['average']
+    if request.method == 'POST' and 'review_submit' in request.POST:
+        content = request.POST.get('content', '').strip()
+        header = request.POST.get('header', 'Header').strip()
 
-    return render(request, 'reviews/home.html', {
+        if content:
+            Review.objects.create(
+                appid=appid,
+                header=header,
+                content=content,
+                author=request.user,
+                date_posted=now()
+            )
+            return redirect('game_lib_game', appid=appid)
+
+    return render(request, 'game_list/game.html', {
         'game': game,
         'reviews': reviews,
         'ratings': ratings,
+        'avg_rating': avg_rating,
     })
 
 """def Home(request):
