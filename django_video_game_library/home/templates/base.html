@@ -72,87 +72,100 @@
 
         {% block script %}
             <script>
-              const data = '{{ qs_json|safe }}'; // Ensure qs_json is safe for rendering
-              console.log(data);
-              
-              const rdata = JSON.parse(data.replace(/&quot;/g, '"'));
-              console.log(rdata);
-              
-              document.addEventListener('DOMContentLoaded', () => {
-                const input = document.getElementById('search_here');
-                const resultsContainer = document.getElementById('resultsContainer'); // Ensure this matches the HTML element for results
-            
-                if (input && resultsContainer) {
-                    input.addEventListener('keyup', (e) => {
-                        const query = e.target.value.trim();
-            
-                        if (query.length > 0) {
-                            fetch(`/live-search/?q=${query}`)
-                                .then((response) => response.json())
-                                .then((data) => {
-                                    // Clear previous results
-                                    resultsContainer.innerHTML = "";
-            
-                                    // Render new results
-                                    data.results.forEach((game) => {
-                                        const listItem = document.createElement('a');
-                                        listItem.href = `game/${game.appid}`;
-                                        listItem.className = 'list-group-item list-group-item-action list-group-item-dark';
-            
-                                        const rowDiv = document.createElement('div');
-                                        rowDiv.className = 'row';
-            
-                                        // Image Column
-                                        const imgCol = document.createElement('div');
-                                        imgCol.className = 'col-2';
-                                        const img = document.createElement('img');
-                                        img.src = game.gamedata__header_image !== 'path/to/placeholder-image.jpg'
-                                            ? game.gamedata__header_image
-                                            : 'default-placeholder.jpg'; // Replace with actual placeholder image path
-                                        img.alt = game.name;
-                                        img.className = 'img-thumbnail';
-                                        imgCol.appendChild(img);
-            
-                                        // Name Column
-                                        const nameCol = document.createElement('div');
-                                        nameCol.className = 'col-6';
-                                        const nameHeading = document.createElement('h3');
-                                        nameHeading.textContent = game.name;
-                                        nameCol.appendChild(nameHeading);
-            
-                                        // Review Column
-                                        const reviewCol = document.createElement('div');
-                                        reviewCol.className = 'col-4';
-                                        const reviewText = document.createElement('p');
-                                        if (game.review_score_desc === 'No user reviews') {
-                                            reviewText.textContent = game.review_score_desc;
-                                        } else {
-                                            reviewText.textContent = `${game.review_score}/10, ${game.review_score_desc}`;
-                                        }
-                                        reviewCol.appendChild(reviewText);
-            
-                                        // Append Columns to Row
-                                        rowDiv.appendChild(imgCol);
-                                        rowDiv.appendChild(nameCol);
-                                        rowDiv.appendChild(reviewCol);
-            
-                                        // Append Row to List Item
-                                        listItem.appendChild(rowDiv);
-            
-                                        // Append List Item to Results Container
-                                        resultsContainer.appendChild(listItem);
+              // Ensure qs_json is safe for rendering
+                const data = '{{ qs_json|safe }}';
+                console.log(data);
+
+                const rdata = JSON.parse(data.replace(/&quot;/g, '"'));
+                console.log(rdata);
+
+                // Function to initialize live search
+                function initializeLiveSearch() {
+                    const input = document.getElementById('search_here');
+                    const resultsContainer = document.getElementById('resultsContainer'); // Ensure this matches the HTML element for results
+
+                    if (input && resultsContainer) {
+                        input.addEventListener('keyup', (e) => {
+                            const query = e.target.value.trim();
+
+                            if (query.length > 0) {
+                                fetch(`/live-search/?q=${query}`)
+                                    .then((response) => response.json())
+                                    .then((data) => {
+                                        // Clear previous results
+                                        resultsContainer.innerHTML = "";
+
+                                        // Render new results
+                                        data.results.forEach((game) => {
+                                            const listItem = document.createElement('a');
+                                            listItem.href = `game/${game.appid}`;
+                                            listItem.className = 'list-group-item list-group-item-action list-group-item-dark';
+
+                                            const rowDiv = document.createElement('div');
+                                            rowDiv.className = 'row';
+
+                                            // Image Column
+                                            const imgCol = document.createElement('div');
+                                            imgCol.className = 'col-2';
+                                            const img = document.createElement('img');
+                                            img.src = game.gamedata__header_image !== 'path/to/placeholder-image.jpg'
+                                                ? game.gamedata__header_image
+                                                : 'default-placeholder.jpg'; // Replace with actual placeholder image path
+                                            img.alt = game.name;
+                                            img.className = 'img-thumbnail';
+                                            imgCol.appendChild(img);
+
+                                            // Name Column
+                                            const nameCol = document.createElement('div');
+                                            nameCol.className = 'col-6';
+                                            const nameHeading = document.createElement('h3');
+                                            nameHeading.textContent = game.name;
+                                            nameCol.appendChild(nameHeading);
+
+                                            // Review Column
+                                            const reviewCol = document.createElement('div');
+                                            reviewCol.className = 'col-4';
+                                            const reviewText = document.createElement('p');
+                                            if (game.review_score_desc === 'No user reviews') {
+                                                reviewText.textContent = game.review_score_desc;
+                                            } else {
+                                                reviewText.textContent = `${game.review_score}/10, ${game.review_score_desc}`;
+                                            }
+                                            reviewCol.appendChild(reviewText);
+
+                                            // Append Columns to Row
+                                            rowDiv.appendChild(imgCol);
+                                            rowDiv.appendChild(nameCol);
+                                            rowDiv.appendChild(reviewCol);
+
+                                            // Append Row to List Item
+                                            listItem.appendChild(rowDiv);
+
+                                            // Append List Item to Results Container
+                                            resultsContainer.appendChild(listItem);
+                                        });
+                                    })
+                                    .catch((error) => {
+                                        console.error('Error fetching live search results:', error);
                                     });
-                                })
-                                .catch((error) => {
-                                    console.error('Error fetching live search results:', error);
-                                });
-                        } else {
-                            // Clear results if input is empty
-                            resultsContainer.innerHTML = "";
-                        }
-                    });
+                            } else {
+                                // Clear results if input is empty
+                                resultsContainer.innerHTML = "";
+                            }
+                        });
+                    }
                 }
-            })                           
+
+                // Reinitialize live search on page load or back navigation
+                document.addEventListener('DOMContentLoaded', () => {
+                    initializeLiveSearch();
+                });
+
+                // Handle back navigation (browser-specific behavior)
+                window.addEventListener('pageshow', () => {
+                    initializeLiveSearch();
+                });
+                 
             </script>
         {% endblock script %}
         
