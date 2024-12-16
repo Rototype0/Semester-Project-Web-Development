@@ -1,51 +1,62 @@
-{% extends "reviews/base.html" %}
-<h1>{{ game.name }}</h1>
+{% extends "base.html" %}
+{% block content %}
+<body>
+<div class="row" style="background-color: #BCC0C7;">
+    <div class="col-12">
+        <hr>
+        <h3>Reviews and Ratings:</h3>
 
-<h2>Reviews</h2>
-{% if reviews %}
-    <ul>
-        {% for review in reviews %}
-            <li>
-                <strong>{{ review.header }}</strong>: {{ review.content }}
-                <br>
-                <em>By {{ review.author.username }} on {{ review.date_posted }}</em>
-                <ul>
-                    {% for rating in review.ratings.all %}
-                        <li>Rating: {{ rating.score }} by {{ rating.user.username }}</li>
-                    {% endfor %}
-                </ul>
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No reviews available for this game.</p>
-{% endif %}
+        {% if oreviews %}
+            <h4>reviews:</h4>
+            <ul>
+                {% for oreview in oreviews %}
+                    <li>
+                        <strong>{{ oreview.header }}</strong> by {{ oreview.author.username }}
+                        <p>{{ oreview.content }}</p>
+                        <small>Posted on {{ oreview.date_posted }}</small>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>No Reviews yet. Be the first to write one!</p>
+        {% endif %}
 
-<h2>Ratings</h2>
-{% if ratings %}
-    <ul>
-        {% for rating in ratings %}
-            <li>
-                Rating: {{ rating.score }} by {{ rating.user.username }}
-                {% if rating.review %}
-                    (Linked to review: "{{ rating.review.header }}")
-                {% endif %}
-            </li>
-        {% endfor %}
-    </ul>
-{% else %}
-    <p>No ratings available for this game.</p>
-{% endif %}
+        {% if avg_rating %}
+            <p><strong>Average Rating:</strong> {{ avg_rating|floatformat:1 }} / 10</p>
+        {% else %}
+            <p>No ratings yet.</p>
+        {% endif %}
 
+        {% if user.is_authenticated %}
+            <hr>
+            <h4>Rate this Game:</h4>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="rating">Rating (1-10):</label>
+                    <input type="number" id="rating" name="rating" class="form-control" min="1" max="10" required>
+                </div>
+                <button type="submit" name="rating_submit" class="btn btn-primary">Submit Rating</button>
+            </form>
 
-<!--{% extends "reviews/base.html" %}
-    {% block content %}
-    <h1>Reviews Home</h1>
-    {% for review in reviews %}
-    <div class = "review_container">
-        <p>{{review.header}}</p>
-        <h4>{{review.content}}</h4>
-        <small>By {{review.author}} on {{review.date_posted|date:'j F Y'}} with rating <li name = "rating-list">{{ rating.rating }}</li></small>
+            <h4>Write an Review:</h4>
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-group mb-3">
+                    <label for="header">Header:</label>
+                    <input type="text" id="header" name="header" class="form-control" placeholder="Enter a title" required>
+                </div>
+                <div class="form-group mb-3">
+                    <label for="content">Content:</label>
+                    <textarea id="content" name="content" class="form-control" rows="4" placeholder="Write your OReview here..." required></textarea>
+                </div>
+                <button type="submit" name="oreview_submit" class="btn btn-primary">Submit Review</button>
+            </form>
+        {% else %}
+            <p><a href="{% url 'login' %}">Log in</a> to rate or write an Review.</p>
+        {% endif %}
     </div>
-    {% endfor %}
-{% endblock content %}-->
+</div>
+</body>
+
+{%endblock content%}

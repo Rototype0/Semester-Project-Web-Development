@@ -1,10 +1,10 @@
 from django.contrib import admin
-from .models import Review, Rating
+from .models import OReview, Rating
 #from games_list.models import Game
 
 # Register your models here.
 
-@admin.register(Review)
+@admin.register(OReview)
 class ReviewAdmin(admin.ModelAdmin):
     list_display = ('header', 'appid', 'author', 'date_posted')
     list_filter = ('appid', 'author', 'date_posted')

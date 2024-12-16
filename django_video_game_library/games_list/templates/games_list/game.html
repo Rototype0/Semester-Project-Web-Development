@@ -73,58 +73,21 @@
         <p>{{game.gamedata.supported_languages |safe}}</p>
     </div>
 </div>
-<div class="row" style="background-color: #BCC0C7;">
-    <div class="col-12">
-        <hr>
-        <h3>Reviews:</h3>
-        {% if reviews %}
-            <ul>
-                {% for review in reviews %}
-                    <li>
-                        <strong>{{ review.header }}</strong> by {{ review.author.username }}
-                        <p>{{ review.content }}</p>
-                        <small>Posted on {{ review.date_posted }}</small>
-                    </li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <p>No reviews yet. Be the first to write one!</p>
-        {% endif %}
-
-        <hr>
-        <h3>Ratings:</h3>
-        {% if avg_rating %}
-            <p>Average Rating: {{ avg_rating|floatformat:1 }} / 10</p>
-        {% else %}
-            <p>No ratings yet.</p>
-        {% endif %}
-    </div>
-</div>
-
-{% if user.is_authenticated %}
-    <div class="row" style="background-color: #BCC0C7;">
-        <div class="col-4">
-            <h4>Write a Review:</h4>
-            <form method="POST">
-                {% csrf_token %}
-                <div class="form-group mb-3">
-                    <label for="header">Header:</label>
-                    <input type="text" id="header" name="header" class="form-control" placeholder="Enter a title" required>
-                </div>
-                <div class="form-group mb-3">
-                    <label for="content">Content:</label>
-                    <textarea id="content" name="content" class="form-control" rows="4" placeholder="Write your review here..." required></textarea>
-                </div>
-                <button type="submit" name="review_submit" class="btn btn-primary">Submit Review</button>
-            </form>
-        </div>
-    </div>
-{% else %}
-    <p><a href="{% url 'game_lib_login' %}">Log in</a> to write a review.</p>
-{% endif %}
+<div id="2"></div>
 
 
 
+<script>
+    window.onload = function() {
+        $.ajax({
+            url: "{% url 'game_lib_oreviews' game.appid %}",
+            method: 'GET',
+            success: function(response) {
+                $('#2').html(response);
+            }
+        });
+    };
+</script>
 
 <div class="row" style="background-color: #BCC0C7;">
     <div class="col">
