@@ -8,7 +8,8 @@ from django.db.models import Avg
 
 def OReviews(request, appid):
     game = get_object_or_404(Game, appid=appid)
-    oreviews = OReview.objects.filter(appid=appid).order_by('-date_posted')
+    oreviews = OReview.objects.filter(appid=appid) #.order_by('-date_posted')
+    oreviews = oreviews.annotate(avg_score=Avg('ratings__score')).order_by('-avg_score', '-date_posted')
     ratings = Rating.objects.filter(appid=appid)
     avg_rating = ratings.aggregate(average=Avg('score'))['average']
 
@@ -36,10 +37,13 @@ def OReviews(request, appid):
             if score:
                 score = int(score)
                 if 1 <= score <= 10:
-                    rating, created = Rating.objects.get_or_create(
-                        appid=appid,
-                        user=request.user,
-                        defaults={'score': score}
+                    review = OReview.objects.filter(appid=appid, author=request.user).first()
+                    if review:
+                        rating, created = Rating.objects.get_or_create(
+                            appid=appid,
+                            user=request.user,
+                            review=review, 
+                            defaults={'score': score}
                     )
                     if not created:
                         rating.score = score

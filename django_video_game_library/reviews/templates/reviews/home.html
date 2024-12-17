@@ -7,12 +7,20 @@
         <h3>Reviews and Ratings:</h3>
 
         {% if oreviews %}
-            <h4>reviews:</h4>
+            <h4>Top Reviews:</h4>
             <ul>
                 {% for oreview in oreviews %}
                     <li>
                         <strong>{{ oreview.header }}</strong> by {{ oreview.author.username }}
                         <p>{{ oreview.content }}</p>
+                        <p>
+                            <strong>Average Rating:</strong>
+                            {% if oreview.avg_score %}
+                                {{ oreview.avg_score|floatformat:1 }} / 10
+                            {% else %}
+                                No ratings yet.
+                            {% endif %}
+                        </p>
                         <small>Posted on {{ oreview.date_posted }}</small>
                     </li>
                 {% endfor %}
@@ -21,16 +29,17 @@
             <p>No Reviews yet. Be the first to write one!</p>
         {% endif %}
 
-        {% if user_rating %}
-            <p><strong>Your Rating:</strong> {{ user_rating.score }} / 10</p>
-        {% else %}
-            <p>You have not submited a rating yet!</p>
-        {% endif %}
 
         {% if avg_rating %}
             <p><strong>Average Rating:</strong> {{ avg_rating|floatformat:1 }} / 10</p>
         {% else %}
             <p>No ratings yet.</p>
+        {% endif %}
+
+        {% if user_rating %}
+            <p><strong>Your Rating:</strong> {{ user_rating.score }} / 10</p>
+        {% else %}
+            <p>You have not submited a rating yet!</p>
         {% endif %}
 
         {% if user.is_authenticated %}
