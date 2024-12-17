@@ -1,4 +1,9 @@
 {% extends "reviews/base.html" %}
+
+{% block extra_styles %}
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+{% endblock extra_styles %}
+
 <h1>{{ game.name }}</h1>
 
 <h2>Reviews</h2>
@@ -14,9 +19,13 @@
                 <form method="POST" action="{% url 'like-review' review.id %}">
                     {% csrf_token %}
                     {% if user in review.likes.all %}
-                        <button type="submit">Unlike</button>
+                        <button type="submit" class = "btn btn-danger">
+                            <i class = "bx bxs-heart"></i>Unlike
+                        </button>
                     {% else %}
-                        <button type="submit">Like</button>
+                        <button type="submit" class = "btn btn-primary">
+                            <i class = "bx bx-heart"></i>Like
+                        </button>
                     {% endif %}
                 </form>
                 <p>Likes: {{ review.total_likes }}</p>
