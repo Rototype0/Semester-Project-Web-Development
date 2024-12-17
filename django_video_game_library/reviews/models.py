@@ -8,7 +8,7 @@ from django.urls import reverse
 
 # Create your models here.
 
-class Review(models.Model):
+class OReview(models.Model):
     appid = models.IntegerField()
     header = models.CharField(max_length=100, default="Header")
     content = models.TextField()
@@ -32,7 +32,7 @@ class Rating(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField(default=0)
     review = models.ForeignKey(
-        Review,
+        OReview,
         on_delete=models.SET_NULL,
         null=True,
         blank=True,

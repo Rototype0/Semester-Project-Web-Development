@@ -5,6 +5,8 @@ from games_list.models import Game
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 
 def OReviews(request, appid):
     game = get_object_or_404(Game, appid=appid)
@@ -53,3 +55,31 @@ def OReviews(request, appid):
         'ratings': ratings,
         'avg_rating': avg_rating,
     })
+
+def like_review(request, review_id):
+    oreview = get_object_or_404(OReview, id=review_id)
+    if request.user in oreview.likes.all():
+        oreview.likes.remove(request.user)  # Unlike
+    else:
+        oreview.likes.add(request.user)  # Like
+    return redirect(reverse('review-detail', args=[review_id]))
+
+
+def review_detail(request, review_id): #cgpt suggestion what might be a solution the issue, unknown if it isn't from migrations
+    oreview = get_object_or_404(OReview, id=review_id)
+    return render(request, 'reviews/review_detail.html', {'review': oreview})
+
+"""def Likes(request, appid):       #what is post_id in this case
+    user = request.user
+    rev = Review.objects.get(appid = appid)
+    current_likes = rev.likes
+    liked = Likes.objects.filter(user = request.user, rev = rev).count()
+    if not liked:
+        liked = Likes.objects.create(user = request.user, rev = rev)
+        current_likes = current_likes+1
+    else:
+        liked = Likes.objects.filter(user = request.user, rev = rev).delete()
+        current_likes = current_likes-1
+    rev.likes = current_likes
+    rev.save()
+    return HttpResponseRedirect(reverse('reviews', args=[appid]))"""

@@ -1,39 +1,56 @@
 {% extends "base.html" %}
 {% block content %}
-<body>
-<div class="row" style="background-color: #BCC0C7;">
-    <div class="col-12">
-        <hr>
-        <h3>Reviews and Ratings:</h3>
 
-        {% if oreviews %}
+<body>
+    <div class="row" style="background-color: #BCC0C7;">
+        <div class="col-12">
+            <hr>
+            <h3>Reviews and Ratings:</h3>
+
+            {% if oreviews %}
             <h4>reviews:</h4>
             <ul>
                 {% for oreview in oreviews %}
-                    <li>
-                        <strong>{{ oreview.header }}</strong> by {{ oreview.author.username }}
-                        <p>{{ oreview.content }}</p>
-                        <small>Posted on {{ oreview.date_posted }}</small>
-                    </li>
+                <li>
+                    <strong>{{ oreview.header }}</strong> by {{ oreview.author.username }}
+                    <p>{{ oreview.content }}</p>
+                    <small>Posted on {{ oreview.date_posted }}</small>
+
+                    <!-- Like/Unlike Form -->
+                    <form method="POST" action="{% url 'like-review' oreview.id %}">
+                        {% csrf_token %}
+                        {% if user in oreview.likes.all %}
+                        <button type="submit" class="btn btn-danger">
+                            <i class="bx bxs-heart"></i>Unlike
+                        </button>
+                        {% else %}
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bx bx-heart"></i>Like
+                        </button>
+                        {% endif %}
+                    </form>
+                    <p>Likes: {{ oreview.total_likes }}</p>
+
+                </li>
                 {% endfor %}
             </ul>
-        {% else %}
+            {% else %}
             <p>No Reviews yet. Be the first to write one!</p>
-        {% endif %}
+            {% endif %}
 
-        {% if user_rating %}
+            {% if user_rating %}
             <p><strong>Your Rating:</strong> {{ user_rating.score }} / 10</p>
-        {% else %}
+            {% else %}
             <p>You have not submited a rating yet!</p>
-        {% endif %}
+            {% endif %}
 
-        {% if avg_rating %}
+            {% if avg_rating %}
             <p><strong>Average Rating:</strong> {{ avg_rating|floatformat:1 }} / 10</p>
-        {% else %}
+            {% else %}
             <p>No ratings yet.</p>
-        {% endif %}
+            {% endif %}
 
-        {% if user.is_authenticated %}
+            {% if user.is_authenticated %}
             <hr>
             <h4>Rate this Game:</h4>
             <form method="POST">
@@ -50,31 +67,33 @@
                 {% csrf_token %}
                 <div class="form-group mb-3">
                     <label for="header">Title:</label>
-                    <input type="text" id="header" name="header" class="form-control" placeholder="Enter a title" required>
+                    <input type="text" id="header" name="header" class="form-control" placeholder="Enter a title"
+                        required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="content">Content:</label>
-                    <textarea id="content" name="content" class="form-control" rows="4" placeholder="Write your Review here..." required></textarea>
+                    <textarea id="content" name="content" class="form-control" rows="4"
+                        placeholder="Write your Review here..." required></textarea>
                 </div>
                 <button type="submit" name="oreview_submit" class="btn btn-primary">Submit Review</button>
             </form>
-        {% else %}
-        <div style="display: flex; gap: 10px;">
-            <form method="get" action="{% url 'game_lib_login' %}">
-                <button class="btn btn-primary" type="submit">Log in to leave a Review or a Rating</button>
+            {% else %}
+            <div style="display: flex; gap: 10px;">
+                <form method="get" action="{% url 'game_lib_login' %}">
+                    <button class="btn btn-primary" type="submit">Log in to leave a Review or a Rating</button>
                 </form>
-        
+
                 <form method="get" action="{% url 'game_lib_register' %}">
-                <button class="btn btn-primary" type="submit">Don't have an account? Register Now!</button>
+                    <button class="btn btn-primary" type="submit">Don't have an account? Register Now!</button>
                 </form>
+            </div>
+
+            {% endif %}
+            <hr>
         </div>
-        
-        {% endif %}
         <hr>
     </div>
     <hr>
-</div>
-<hr>
 </body>
 
 {%endblock content%}

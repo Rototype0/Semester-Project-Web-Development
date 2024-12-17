@@ -7,6 +7,6 @@ urlpatterns = [
     #path('', views.Home, name='reviews-home'),
     #path('about/', views.About, name='reviews-about'),
     #path('rate/<int:post_id>/<int:rating>/', views.rate),
-    path('review/<int:review_id>/like/', views.like_review, name='like-review'),
+    path('oreview/<int:review_id>/like/', views.like_review, name='like-review'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
