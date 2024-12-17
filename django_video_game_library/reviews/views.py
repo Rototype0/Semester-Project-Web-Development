@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.db.models import Avg
 from django.http import HttpResponseRedirect
+from django.http import HttpResponse
 from django.urls import reverse
 
 def OReviews(request, appid):
@@ -56,18 +57,21 @@ def OReviews(request, appid):
         'avg_rating': avg_rating,
     })
 
+@login_required
 def like_review(request, review_id):
     oreview = get_object_or_404(OReview, id=review_id)
     if request.user in oreview.likes.all():
         oreview.likes.remove(request.user)  # Unlike
     else:
         oreview.likes.add(request.user)  # Like
-    return redirect(reverse('review-detail', args=[review_id]))
+    if hasattr(oreview, 'appid') and oreview.appid:
+        return redirect('game_lib_game', appid=oreview.appid)
+    else:
+        return HttpResponse("Game ID not found", status=400)
 
-
-def review_detail(request, review_id): #cgpt suggestion what might be a solution the issue, unknown if it isn't from migrations
+"""def review_detail(request, review_id): #what might be a solution the issue, unknown if it isn't from migrations
     oreview = get_object_or_404(OReview, id=review_id)
-    return render(request, 'reviews/review_detail.html', {'review': oreview})
+    return render(request, 'reviews/review_detail.html', {'review': oreview})"""
 
 """def Likes(request, appid):       #what is post_id in this case
     user = request.user
