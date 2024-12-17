@@ -12,6 +12,10 @@ def OReviews(request, appid):
     ratings = Rating.objects.filter(appid=appid)
     avg_rating = ratings.aggregate(average=Avg('score'))['average']
 
+    user_rating = None
+    if request.user.is_authenticated:
+        user_rating = Rating.objects.filter(appid=appid, user=request.user).first()
+
     if request.method == 'POST':
         if 'oreview_submit' in request.POST:
             content = request.POST.get('content', '').strip()
@@ -45,6 +49,7 @@ def OReviews(request, appid):
     return render(request, 'reviews/home.html', {
         'game': game,
         'oreviews': oreviews,
+        'user_rating': user_rating,
         'ratings': ratings,
         'avg_rating': avg_rating,
     })

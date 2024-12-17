@@ -21,6 +21,12 @@
             <p>No Reviews yet. Be the first to write one!</p>
         {% endif %}
 
+        {% if user_rating %}
+            <p><strong>Your Rating:</strong> {{ user_rating.score }} / 10</p>
+        {% else %}
+            <p>You have not submited a rating yet!</p>
+        {% endif %}
+
         {% if avg_rating %}
             <p><strong>Average Rating:</strong> {{ avg_rating|floatformat:1 }} / 10</p>
         {% else %}
@@ -43,20 +49,32 @@
             <form method="POST">
                 {% csrf_token %}
                 <div class="form-group mb-3">
-                    <label for="header">Header:</label>
+                    <label for="header">Title:</label>
                     <input type="text" id="header" name="header" class="form-control" placeholder="Enter a title" required>
                 </div>
                 <div class="form-group mb-3">
                     <label for="content">Content:</label>
-                    <textarea id="content" name="content" class="form-control" rows="4" placeholder="Write your OReview here..." required></textarea>
+                    <textarea id="content" name="content" class="form-control" rows="4" placeholder="Write your Review here..." required></textarea>
                 </div>
                 <button type="submit" name="oreview_submit" class="btn btn-primary">Submit Review</button>
             </form>
         {% else %}
-            <p><a href="{% url 'login' %}">Log in</a> to rate or write an Review.</p>
+        <div style="display: flex; gap: 10px;">
+            <form method="get" action="{% url 'game_lib_login' %}">
+                <button class="btn btn-primary" type="submit">Log in to leave a Review or a Rating</button>
+                </form>
+        
+                <form method="get" action="{% url 'game_lib_register' %}">
+                <button class="btn btn-primary" type="submit">Don't have an account? Register Now!</button>
+                </form>
+        </div>
+        
         {% endif %}
+        <hr>
     </div>
+    <hr>
 </div>
+<hr>
 </body>
 
 {%endblock content%}

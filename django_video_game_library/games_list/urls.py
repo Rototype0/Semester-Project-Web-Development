@@ -7,6 +7,5 @@ urlpatterns = [
     path('importjson/', views.import_data, name='import_json'),
     path('', views.Games_List, name='games_list'),
     path('game/<str:appid>/', views.Game_Info, name='game_lib_game'),
-    path('game/<int:appid>/reviews/', OReviews, name='game_lib_oreviews'),
-
+    path('game/<str:appid>/reviews/', OReviews, name='game_lib_oreviews'),
 ]

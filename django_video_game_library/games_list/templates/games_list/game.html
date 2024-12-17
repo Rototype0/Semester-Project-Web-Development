@@ -25,6 +25,10 @@
             </h3>
             {% endif %}
         {% endif %}
+        <form method="post" action="{% url 'game_lib_oreviews' appid=game.appid %}">
+            {% csrf_token %}
+            <button class="btn btn-success" type="submit">Reviews and Ratings</button>
+        </form>
     </div>
 </div>
 <div class="row" style="background-color: #BCC0C7;">
@@ -75,9 +79,7 @@
 </div>
 <div id="2"></div>
 
-
-
-<script>
+<!--<script>
     window.onload = function() {
         $.ajax({
             url: "{% url 'game_lib_oreviews' game.appid %}",
@@ -87,7 +89,7 @@
             }
         });
     };
-</script>
+</script>-->
 
 <div class="row" style="background-color: #BCC0C7;">
     <div class="col">
